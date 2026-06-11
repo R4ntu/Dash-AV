@@ -10,7 +10,12 @@
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/SheetJS-style/0.15.7/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+  if (typeof XLSX === 'undefined') {
+    document.write('<script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"><\/script>');
+  }
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -518,6 +523,29 @@ table.dataTable tbody td{vertical-align:middle;}
       <div id="skuResultArea" style="display:none;">
         <div class="kpi-grid" id="skuKpiGrid"></div>
 
+        <div class="row g-3 mb-3">
+          <div class="col-12">
+            <div class="card-x">
+              <div class="card-title-x"><i class="fa-solid fa-link"></i>Cruzamento On-rack Qty &times; Movimentações (origem das peças hoje em AV)</div>
+              <p class="muted" style="font-size:.8rem;">
+                Saldo atual em AV (On-rack Qty): <b id="crossOnRackQty" class="mono"></b> peças.
+                As movimentações abaixo têm <b>To Location = AV</b> e representam as entradas que originaram (total ou parcialmente) esse saldo,
+                mostrando de onde (From Location) vieram as peças.
+              </p>
+              <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                  <thead><tr>
+                    <th>Data/Hora</th><th>From Location (Origem)</th><th>To Location (Destino)</th>
+                    <th>Transaction Type</th><th>Operador</th><th>Quantidade</th><th>Close Qty</th>
+                  </tr></thead>
+                  <tbody id="skuCrossTbl"></tbody>
+                </table>
+              </div>
+              <div id="crossSummary" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="row g-3">
           <div class="col-lg-5">
             <div class="card-x">
@@ -832,7 +860,7 @@ function processOnHand(){
       ONHAND_BY_SKU[skuId] = {
         skuId,
         skuName: str(pick(row,['Sku Name','SKU Name','sku_name'])),
-        qty: num(pick(row,['On Hand Qty','OnHand Qty','On_Hand_Qty','on hand qty'])),
+        qty: num(pick(row,['On-rack Qty','On Rack Qty','OnRack Qty','On_rack_Qty','on-rack qty','On-Rack Qty','OnrackQty'])),
         category: str(pick(row,['Category','category'])) || 'Sem Categoria',
         status: str(pick(row,['Inventory Status','inventory_status']))
       };
@@ -1370,6 +1398,42 @@ function loadSkuAnalysis(){
   document.getElementById('skuOperatorsTbl').innerHTML = opRows.map(([op,d])=>`
     <tr><td>${op}</td><td>${fmtNum(d.count)}</td><td>${fmtNum(d.qty)}</td></tr>
   `).join('') || '<tr><td colspan="3" class="text-muted text-center">Sem dados</td></tr>';
+
+  // ---- Cross-reference: On-rack Qty x inbound movements (To Location = AV) ----
+  document.getElementById('crossOnRackQty').innerText = fmtNum(p.currentQty);
+  const inbound = txs.filter(t=>t.isEntryAV).slice().reverse(); // most recent first
+  document.getElementById('skuCrossTbl').innerHTML = inbound.map(t=>`
+    <tr>
+      <td class="mono">${fmtDate(t.date)}</td>
+      <td class="mono">${t.fromLoc||'-'}</td>
+      <td class="mono">${t.toLoc||'-'}</td>
+      <td><span class="badge badge-shopee">${t.type}</span></td>
+      <td>${t.operator}</td>
+      <td><b>${fmtNum(t.qty)}</b></td>
+      <td>${fmtNum(t.closeQty)}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" class="text-muted text-center">Nenhuma movimentação de entrada (To Location = AV) encontrada para este SKU.</td></tr>';
+
+  // origin breakdown (From Location)
+  const originAgg = {};
+  for(const t of inbound){
+    const loc = t.fromLoc || '(não informado)';
+    if(!originAgg[loc]) originAgg[loc] = {qty:0,count:0};
+    originAgg[loc].qty += t.qty; originAgg[loc].count++;
+  }
+  const totalInboundQty = inbound.reduce((a,t)=>a+t.qty,0);
+  const originRows = Object.entries(originAgg).sort((a,b)=>b[1].qty-a[1].qty);
+  const coverage = totalInboundQty>0 ? Math.min(100, (totalInboundQty/Math.max(p.currentQty,1))*100) : 0;
+  document.getElementById('crossSummary').innerHTML = `
+    <div class="d-flex flex-wrap gap-2 mb-2">
+      ${originRows.map(([loc,d])=>`<span class="tree-pill qty mono">${loc}: ${fmtNum(d.qty)} pçs (${d.count} mov.)</span>`).join('')}
+    </div>
+    <div class="muted" style="font-size:.78rem;">
+      Total movimentado para AV: <b>${fmtNum(totalInboundQty)}</b> peças vs. saldo atual On-rack Qty: <b>${fmtNum(p.currentQty)}</b> peças
+      ${p.saidas>0 ? ` (descontadas <b>${fmtNum(p.saidas)}</b> peças retiradas do AV).` : '.'}
+    </div>
+  `;
+
 
   // timeline
   document.getElementById('skuTimeline').innerHTML = txs.map(t=>{
