@@ -1217,6 +1217,7 @@ function buildParetoCharts(OHAGG){
   const typeData = topN(OHAGG.byType,'qty',10);
   destroyChart('chartParetoType');
   CHARTS['chartParetoType'] = new Chart(document.getElementById('chartParetoType'), {
+    type: 'bar',
     data:{ labels: typeData.map(d=>d[0]), datasets: makeParetoDatasets(typeData) },
     options: paretoOpts('Processo causador')
   });
@@ -1225,6 +1226,7 @@ function buildParetoCharts(OHAGG){
   const opData = topN(OHAGG.byOperator,'qty',10);
   destroyChart('chartParetoOp');
   CHARTS['chartParetoOp'] = new Chart(document.getElementById('chartParetoOp'), {
+    type: 'bar',
     data:{ labels: opData.map(d=>d[0]), datasets: makeParetoDatasets(opData) },
     options: paretoOpts('Operador causador')
   });
