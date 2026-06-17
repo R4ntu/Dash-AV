@@ -46,7 +46,6 @@ body{
 }
 .mono{font-family:'JetBrains Mono',monospace;}
 
-/* ===== TOPBAR ===== */
 .topbar{
   background:var(--surface);
   border-bottom:1px solid var(--line);
@@ -69,7 +68,6 @@ body{
 .brand-text h1{font-size:1.05rem;font-weight:800;margin:0;line-height:1.1;}
 .brand-text span{font-size:.72rem;color:var(--ink-soft);font-weight:500;text-transform:uppercase;letter-spacing:.06em;}
 
-/* ===== NAV ===== */
 .navwrap{
   background:var(--surface);
   border-bottom:1px solid var(--line);
@@ -98,7 +96,6 @@ body{
 .page.active{display:block;animation:fadein .25s ease;}
 @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* ===== CARDS ===== */
 .card-x{
   background:var(--surface);
   border:1px solid var(--line);
@@ -112,7 +109,6 @@ body{
 }
 .card-title-x i{color:var(--shopee);}
 
-/* KPI cards */
 .kpi-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
@@ -136,7 +132,6 @@ body{
 .kpi-sub{font-size:.72rem;color:var(--ink-soft);margin-top:.3rem;}
 .kpi-sub b{color:var(--ink);}
 
-/* ===== UPLOAD GATE ===== */
 .gate{
   min-height:calc(100vh - 110px);
   display:flex;align-items:center;justify-content:center;
@@ -172,7 +167,6 @@ body{
 .progress{height:8px;border-radius:99px;}
 .progress-bar{background:var(--shopee);}
 
-/* ===== FILTER BAR ===== */
 .filterbar{
   background:var(--surface);
   border:1px solid var(--line);
@@ -189,7 +183,6 @@ body{
 }
 .filterbar select[multiple]{min-height:34px;}
 
-/* ===== TABLES ===== */
 table.dataTable{font-size:.8rem;}
 table.dataTable thead th{
   background:var(--ink);color:#fff;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;
@@ -206,7 +199,6 @@ table.dataTable tbody td{vertical-align:middle;}
 .rank-badge.top2{background:#F2A93B;}
 .rank-badge.top3{background:#5C6273;}
 
-/* ===== INSIGHTS ===== */
 .insight{
   display:flex;gap:.75rem;align-items:flex-start;
   padding:.85rem 1rem;border-radius:12px;background:#FFF8F6;
@@ -215,7 +207,6 @@ table.dataTable tbody td{vertical-align:middle;}
 .insight i{color:var(--shopee);margin-top:.15rem;}
 .insight b{color:var(--ink);}
 
-/* ===== TIMELINE ===== */
 .tl{position:relative;padding-left:2rem;}
 .tl::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:var(--line);}
 .tl-item{position:relative;padding-bottom:1.1rem;}
@@ -232,7 +223,6 @@ table.dataTable tbody td{vertical-align:middle;}
 }
 .tl-time{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--ink-soft);}
 
-/* ===== TREE (causa raiz drilldown) ===== */
 .tree-node{margin-bottom:.3rem;}
 .tree-toggle{
   display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:10px;
@@ -256,7 +246,6 @@ table.dataTable tbody td{vertical-align:middle;}
 }
 .tree-leaf:last-child{border-bottom:none;}
 
-/* ===== HEATMAP ===== */
 .heatcell{
   font-size:.68rem;text-align:center;font-weight:700;color:#fff;border-radius:4px;
   padding:.3rem;cursor:default;
@@ -266,7 +255,6 @@ table.dataTable tbody td{vertical-align:middle;}
 .heatwrap th{font-size:.62rem;color:var(--ink-soft);font-weight:700;padding:.25rem;text-align:center;writing-mode:vertical-rl;transform:rotate(180deg);max-width:60px;}
 .heatwrap th.rowhead{writing-mode:horizontal-tb;transform:none;text-align:right;max-width:160px;}
 
-/* misc */
 .section-title{font-size:1.1rem;font-weight:800;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem;}
 .section-title i{color:var(--shopee);}
 .muted{color:var(--ink-soft);}
@@ -303,7 +291,7 @@ table.dataTable tbody td{vertical-align:middle;}
   </div>
 </div>
 
-<!-- ============ UPLOAD GATE ============ -->
+<!-- UPLOAD GATE -->
 <div id="gate" class="gate">
   <div class="gate-card">
     <div class="d-flex align-items-center gap-2 mb-3">
@@ -340,7 +328,7 @@ table.dataTable tbody td{vertical-align:middle;}
   </div>
 </div>
 
-<!-- ============ APP ============ -->
+<!-- APP -->
 <div id="app" style="display:none;">
 
   <div class="topbar">
@@ -372,7 +360,6 @@ table.dataTable tbody td{vertical-align:middle;}
 
   <div class="page-content">
 
-    <!-- GLOBAL FILTERS -->
     <div class="filterbar" id="reportArea-filters">
       <div class="fgroup">
         <label>Data Inicial</label>
@@ -409,11 +396,10 @@ table.dataTable tbody td{vertical-align:middle;}
     </div>
 
     <div id="reportArea">
-    <!-- ===================== PAGE 1: EXECUTIVE SUMMARY ===================== -->
+
+    <!-- PAGE 1: EXECUTIVE SUMMARY -->
     <div class="page active" id="p1">
-
       <div class="kpi-grid" id="kpiGrid"></div>
-
       <div class="row g-3 mb-3">
         <div class="col-12">
           <div class="card-x">
@@ -422,7 +408,6 @@ table.dataTable tbody td{vertical-align:middle;}
           </div>
         </div>
       </div>
-
       <div class="row g-3 mb-3">
         <div class="col-lg-6">
           <div class="card-x">
@@ -437,37 +422,30 @@ table.dataTable tbody td{vertical-align:middle;}
           </div>
         </div>
       </div>
-
       <div class="row g-3 mb-3">
-        <div class="col-lg-4">
+        <div class="col-lg-8">
           <div class="card-x">
-            <div class="card-title-x"><i class="fa-solid fa-arrow-trend-up"></i>Evolução Diária — Entradas no AV</div>
-            <div class="chart-box"><canvas id="chartDailyIn"></canvas></div>
+            <div class="card-title-x"><i class="fa-solid fa-arrows-up-down"></i>Entradas x Saídas por Dia — Estoque AV</div>
+            <div class="chart-box tall"><canvas id="chartDailyInOut"></canvas></div>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="card-x">
-            <div class="card-title-x"><i class="fa-solid fa-arrow-trend-down"></i>Evolução Diária — Saídas do AV</div>
-            <div class="chart-box"><canvas id="chartDailyOut"></canvas></div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card-x">
-            <div class="card-title-x"><i class="fa-solid fa-wave-square"></i>Evolução do Saldo AV</div>
-            <div class="chart-box"><canvas id="chartDailyBalance"></canvas></div>
+            <div class="card-title-x"><i class="fa-solid fa-wave-square"></i>Evolução do Saldo Líquido AV</div>
+            <div class="chart-box tall"><canvas id="chartDailyBalance"></canvas></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ===================== PAGE 2: OPERADORES ===================== -->
+    <!-- PAGE 2: OPERADORES -->
     <div class="page" id="p2">
-      <div class="section-title"><i class="fa-solid fa-user-gear"></i>Análise de Operadores</div>
+      <div class="section-title"><i class="fa-solid fa-user-gear"></i>Análise de Operadores — Entradas x Saídas AV</div>
       <div class="card-x">
         <div class="table-responsive">
           <table id="tblOperators" class="table table-striped w-100">
             <thead><tr>
-              <th>Operador</th><th>Ocorrências</th><th>Quantidade</th><th>SKUs Impactados</th><th>Participação %</th><th>Categoria Predominante</th>
+              <th>Operador</th><th>Ocorrências</th><th>↑ Entrada AV</th><th>↓ Saída AV</th><th>Saldo (Ent−Saí)</th><th>SKUs Impactados</th><th>Part. % Entradas</th><th>Categoria Predominante</th>
             </tr></thead>
             <tbody></tbody>
           </table>
@@ -475,7 +453,7 @@ table.dataTable tbody td{vertical-align:middle;}
       </div>
     </div>
 
-    <!-- ===================== PAGE 3: PROCESSOS ===================== -->
+    <!-- PAGE 3: PROCESSOS -->
     <div class="page" id="p3">
       <div class="section-title"><i class="fa-solid fa-diagram-project"></i>Análise de Processos (Transaction Type)</div>
       <div class="row g-3 mb-3">
@@ -504,7 +482,7 @@ table.dataTable tbody td{vertical-align:middle;}
       </div>
     </div>
 
-    <!-- ===================== PAGE 4: SKU ===================== -->
+    <!-- PAGE 4: SKU -->
     <div class="page" id="p4">
       <div class="section-title"><i class="fa-solid fa-magnifying-glass"></i>Análise de SKU</div>
       <div class="card-x mb-3">
@@ -519,23 +497,19 @@ table.dataTable tbody td{vertical-align:middle;}
           </div>
         </div>
       </div>
-
       <div id="skuResultArea" style="display:none;">
         <div class="kpi-grid" id="skuKpiGrid"></div>
-
         <div class="row g-3 mb-3">
           <div class="col-12">
             <div class="card-x">
-              <div class="card-title-x"><i class="fa-solid fa-link"></i>Cruzamento On-rack Qty &times; Movimentações (origem das peças hoje em AV)</div>
+              <div class="card-title-x"><i class="fa-solid fa-link"></i>Cruzamento On-rack Qty &times; Movimentações</div>
               <p class="muted" style="font-size:.8rem;">
                 Saldo atual em AV (On-rack Qty): <b id="crossOnRackQty" class="mono"></b> peças.
-                As movimentações abaixo têm <b>To Location = AV</b> e representam as entradas que originaram (total ou parcialmente) esse saldo,
-                mostrando de onde (From Location) vieram as peças.
               </p>
               <div class="table-responsive">
                 <table class="table table-sm table-striped">
                   <thead><tr>
-                    <th>Data/Hora</th><th>From Location (Origem)</th><th>To Location (Destino)</th>
+                    <th>Data/Hora</th><th>From Location</th><th>To Location</th>
                     <th>Transaction Type</th><th>Operador</th><th>Quantidade</th><th>Close Qty</th>
                   </tr></thead>
                   <tbody id="skuCrossTbl"></tbody>
@@ -545,7 +519,6 @@ table.dataTable tbody td{vertical-align:middle;}
             </div>
           </div>
         </div>
-
         <div class="row g-3">
           <div class="col-lg-5">
             <div class="card-x">
@@ -566,18 +539,17 @@ table.dataTable tbody td{vertical-align:middle;}
           </div>
         </div>
       </div>
-
       <div id="skuEmptyState" class="card-x text-center text-muted py-5">
         <i class="fa-solid fa-box-open fa-2x mb-2"></i>
-        <div>Selecione um SKU acima para ver o histórico completo, operadores envolvidos e linha do tempo.</div>
+        <div>Selecione um SKU acima para ver o histórico completo.</div>
       </div>
     </div>
 
-    <!-- ===================== PAGE 5: CAUSA RAIZ ===================== -->
+    <!-- PAGE 5: CAUSA RAIZ -->
     <div class="page" id="p5">
       <div class="section-title"><i class="fa-solid fa-sitemap"></i>Árvore de Causa Raiz</div>
       <p class="muted" style="font-size:.85rem;">
-        Estrutura: AV → Categoria → Transaction Type → Operador → SKU. Clique para expandir cada nível e investigar a origem do estoque AV.
+        Estrutura: AV → Categoria → Transaction Type → Operador → SKU.
       </p>
       <div class="card-x">
         <div class="d-flex gap-3 mb-3">
@@ -590,7 +562,7 @@ table.dataTable tbody td{vertical-align:middle;}
       </div>
     </div>
 
-    <!-- ===================== PAGE 6: HEATMAP ===================== -->
+    <!-- PAGE 6: HEATMAP -->
     <div class="page" id="p6">
       <div class="section-title"><i class="fa-solid fa-table-cells"></i>Heatmap Operador &times; Processo</div>
       <div class="card-x mb-3">
@@ -604,10 +576,9 @@ table.dataTable tbody td{vertical-align:middle;}
       </div>
     </div>
 
-    <!-- ===================== PAGE 7: TOP OFENSORES ===================== -->
+    <!-- PAGE 7: TOP OFENSORES -->
     <div class="page" id="p7">
       <div class="section-title"><i class="fa-solid fa-trophy"></i>Top Ofensores</div>
-
       <div class="row g-3 mb-3">
         <div class="col-12">
           <div class="card-x">
@@ -621,7 +592,6 @@ table.dataTable tbody td{vertical-align:middle;}
           </div>
         </div>
       </div>
-
       <div class="row g-3">
         <div class="col-lg-4">
           <div class="card-x">
@@ -659,31 +629,29 @@ table.dataTable tbody td{vertical-align:middle;}
       </div>
     </div>
 
-    </div><!-- /reportArea -->
-  </div><!-- /page-content -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
 <script>
 const AV_LOCATION = "BRFPE1-AV-01-01-1-01";
 
 let RAW_ONHAND = [];
 let RAW_TRANS = [];
-let AV_SKUS = new Set();          // SKU IDs currently in AV
-let ONHAND_BY_SKU = {};           // skuId -> onhand record
-let SKU_TRANS = {};               // skuId -> [transactions involving AV]
-let SKU_PROFILE = {};             // skuId -> computed profile
-let FILTERED_TRANS = [];          // current filtered AV-related transactions (entries+exits)
-let ALL_AV_TRANS = [];            // all AV-touching transactions (unfiltered)
-let CHARTS = {};                  // chart instances
-let TREE_MODE = 'qty';            // 'qty' | 'count'
-let HEAT_MODE = 'count';          // 'count' | 'qty'
+let AV_SKUS = new Set();
+let ONHAND_BY_SKU = {};
+let SKU_TRANS = {};
+let SKU_PROFILE = {};
+let FILTERED_TRANS = [];
+let ALL_AV_TRANS = [];
+let CHARTS = {};
+let TREE_MODE = 'qty';
+let HEAT_MODE = 'count';
 
-// ---------- Helpers ----------
 function num(v){
   if(v===null||v===undefined||v==='') return 0;
   if(typeof v === 'number') return v;
   let s = String(v).replace(/\./g,'').replace(',', '.');
-  // handle case where original had no thousand separators e.g. "12.5"
   let n = parseFloat(s);
   if(isNaN(n)) { n = parseFloat(String(v)); }
   return isNaN(n)?0:n;
@@ -694,7 +662,6 @@ function excelDateToJS(val){
   if(val===null||val===undefined||val==='') return null;
   if(val instanceof Date) return val;
   if(typeof val === 'number'){
-    // Excel serial date
     const utcDays = Math.floor(val - 25569);
     const utcValue = utcDays * 86400;
     const date = new Date(utcValue * 1000);
@@ -706,12 +673,9 @@ function excelDateToJS(val){
     const minutes = Math.floor(totalSeconds / 60) % 60;
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes, seconds);
   }
-  // string date
   let s = String(val).trim();
-  // try direct parse
   let d = new Date(s);
   if(!isNaN(d.getTime())) return d;
-  // try DD/MM/YYYY HH:mm:ss
   let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[ T]?(\d{1,2}:\d{2}(:\d{2})?)?/);
   if(m){
     let day=parseInt(m[1]), mon=parseInt(m[2]), yr=parseInt(m[3]);
@@ -737,12 +701,10 @@ function fmtPct(n){
   return n.toFixed(1).replace('.',',') + '%';
 }
 
-// flexible column getter (handles slight header variations)
 function pick(row, candidates){
   for(const c of candidates){
     if(row[c]!==undefined) return row[c];
   }
-  // case-insensitive fallback
   const keys = Object.keys(row);
   for(const c of candidates){
     const found = keys.find(k=>k.toLowerCase().trim()===c.toLowerCase().trim());
@@ -751,7 +713,6 @@ function pick(row, candidates){
   return undefined;
 }
 
-// ---------- File upload UI ----------
 let file1Data=null, file2Data=null;
 
 function setupDropzone(dzId, fileInputId, fnameId, varSetter){
@@ -809,7 +770,6 @@ async function startProcessing(){
   showLoader('Lendo arquivos XLSX...');
   setProgress(5);
   await new Promise(r=>setTimeout(r,50));
-
   try{
     RAW_ONHAND = await readWorkbook(file1Data);
     setProgress(25);
@@ -817,22 +777,18 @@ async function startProcessing(){
     RAW_TRANS = await readWorkbook(file2Data);
     setProgress(45);
     await new Promise(r=>setTimeout(r,50));
-
     showLoader('Identificando SKUs em AV...');
     processOnHand();
     setProgress(60);
     await new Promise(r=>setTimeout(r,50));
-
     showLoader(`Cruzando ${RAW_TRANS.length.toLocaleString('pt-BR')} movimentações...`);
     processTransactions();
     setProgress(85);
     await new Promise(r=>setTimeout(r,50));
-
     showLoader('Construindo dashboards...');
     buildEverything();
     setProgress(100);
     await new Promise(r=>setTimeout(r,150));
-
     document.getElementById('gate').style.display='none';
     document.getElementById('app').style.display='block';
     hideLoader();
@@ -847,7 +803,6 @@ function resetApp(){
   if(confirm('Deseja recarregar a página e investigar novos arquivos?')) location.reload();
 }
 
-// ---------- PASSO 1: ON_HAND -> AV SKUs ----------
 function processOnHand(){
   AV_SKUS = new Set();
   ONHAND_BY_SKU = {};
@@ -868,29 +823,24 @@ function processOnHand(){
   }
 }
 
-// ---------- PASSO 2-4: cross with transactions ----------
 function processTransactions(){
   SKU_TRANS = {};
   ALL_AV_TRANS = [];
-
   for(const row of RAW_TRANS){
     const skuId = str(pick(row,['Sku ID','SKU ID','Sku Id','sku_id','SkuID']));
     if(!AV_SKUS.has(skuId)) continue;
-
     const fromLoc = str(pick(row,['From Location','from_location','FromLocation']));
     const toLoc = str(pick(row,['To Location','to_location','ToLocation']));
     const qty = num(pick(row,['Quantity','quantity','Qty']));
     const closeQty = num(pick(row,['Close Quantity','close_quantity','CloseQty']));
     const dateRaw = pick(row,['Sheet Time','sheet_time','SheetTime','Date']);
     const date = excelDateToJS(dateRaw);
-
     const tx = {
       skuId,
       skuName: str(pick(row,['Sku Name','SKU Name','sku_name'])) || (ONHAND_BY_SKU[skuId]?ONHAND_BY_SKU[skuId].skuName:''),
       type: str(pick(row,['Transaction Type','transaction_type','TransactionType'])) || 'N/A',
       operator: str(pick(row,['Operator','operator'])) || 'N/A',
-      fromLoc, toLoc, qty, closeQty,
-      date,
+      fromLoc, toLoc, qty, closeQty, date,
       taskId: str(pick(row,['Task ID','task_id','TaskID'])),
       category: ONHAND_BY_SKU[skuId] ? ONHAND_BY_SKU[skuId].category : 'Sem Categoria',
       isEntryAV: toLoc === AV_LOCATION,
@@ -900,28 +850,16 @@ function processTransactions(){
     if(!SKU_TRANS[skuId]) SKU_TRANS[skuId] = [];
     SKU_TRANS[skuId].push(tx);
   }
-
-  // sort all by date
-  ALL_AV_TRANS.sort((a,b)=>{
-    const ta = a.date?a.date.getTime():0, tb = b.date?b.date.getTime():0;
-    return ta-tb;
-  });
+  ALL_AV_TRANS.sort((a,b)=>{ const ta=a.date?a.date.getTime():0, tb=b.date?b.date.getTime():0; return ta-tb; });
   for(const skuId in SKU_TRANS){
-    SKU_TRANS[skuId].sort((a,b)=>{
-      const ta = a.date?a.date.getTime():0, tb = b.date?b.date.getTime():0;
-      return ta-tb;
-    });
+    SKU_TRANS[skuId].sort((a,b)=>{ const ta=a.date?a.date.getTime():0, tb=b.date?b.date.getTime():0; return ta-tb; });
   }
-
-  // build per-sku profile
   SKU_PROFILE = {};
   for(const skuId of AV_SKUS){
     const txs = SKU_TRANS[skuId] || [];
     const onhand = ONHAND_BY_SKU[skuId];
-    let entradas=0, saidas=0;
-    let lastEntry=null, lastExit=null;
-    const operators = new Set();
-    const processes = new Set();
+    let entradas=0, saidas=0, lastEntry=null, lastExit=null;
+    const operators = new Set(), processes = new Set();
     for(const t of txs){
       if(t.isEntryAV){ entradas += t.qty; lastEntry = t; }
       if(t.isExitAV){ saidas += t.qty; lastExit = t; }
@@ -929,23 +867,17 @@ function processTransactions(){
       if(t.type) processes.add(t.type);
     }
     SKU_PROFILE[skuId] = {
-      skuId,
-      skuName: onhand?onhand.skuName:(txs[0]?txs[0].skuName:skuId),
+      skuId, skuName: onhand?onhand.skuName:(txs[0]?txs[0].skuName:skuId),
       category: onhand?onhand.category:'Sem Categoria',
       currentQty: onhand?onhand.qty:0,
-      first: txs[0]||null,
-      last: txs[txs.length-1]||null,
-      entradas, saidas,
-      saldoLiquido: entradas - saidas,
+      first: txs[0]||null, last: txs[txs.length-1]||null,
+      entradas, saidas, saldoLiquido: entradas - saidas,
       lastEntry, lastExit,
-      operators: [...operators],
-      processes: [...processes],
-      transCount: txs.length
+      operators: [...operators], processes: [...processes], transCount: txs.length
     };
   }
 }
 
-// ---------- FILTERS ----------
 function getFilterOptions(){
   const types = new Set(), cats = new Set(), ops = new Set();
   for(const t of ALL_AV_TRANS){
@@ -958,12 +890,9 @@ function getFilterOptions(){
 
 function populateFilterSelects(){
   const {types,cats,ops} = getFilterOptions();
-  const fType = document.getElementById('fType');
-  const fCat = document.getElementById('fCategory');
-  const fOp = document.getElementById('fOperator');
-  fType.innerHTML = types.map(t=>`<option value="${t}">${t}</option>`).join('');
-  fCat.innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-  fOp.innerHTML = ops.map(o=>`<option value="${o}">${o}</option>`).join('');
+  document.getElementById('fType').innerHTML = types.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('fCategory').innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+  document.getElementById('fOperator').innerHTML = ops.map(o=>`<option value="${o}">${o}</option>`).join('');
 }
 
 function getSelectedValues(id){
@@ -977,10 +906,8 @@ function applyFilters(){
   const cats = getSelectedValues('fCategory');
   const ops = getSelectedValues('fOperator');
   const skuQuery = document.getElementById('fSku').value.trim().toLowerCase();
-
   const startDate = start ? new Date(start+'T00:00:00') : null;
   const endDate = end ? new Date(end+'T23:59:59') : null;
-
   FILTERED_TRANS = ALL_AV_TRANS.filter(t=>{
     if(startDate && (!t.date || t.date < startDate)) return false;
     if(endDate && (!t.date || t.date > endDate)) return false;
@@ -990,33 +917,39 @@ function applyFilters(){
     if(skuQuery && !(t.skuId.toLowerCase().includes(skuQuery) || t.skuName.toLowerCase().includes(skuQuery))) return false;
     return true;
   });
-
   buildEverything(true);
 }
 
-// =====================================================================
-// AGGREGATIONS
-// =====================================================================
+function clearFilters(){
+  document.getElementById('fDateStart').value='';
+  document.getElementById('fDateEnd').value='';
+  ['fType','fCategory','fOperator'].forEach(id=>{
+    [...document.getElementById(id).options].forEach(o=>o.selected=false);
+  });
+  document.getElementById('fSku').value='';
+  FILTERED_TRANS = ALL_AV_TRANS.slice();
+  buildEverything(true);
+}
+
+// ── AGGREGATIONS ─────────────────────────────────────────────────────────────
 function aggregate(transList){
   const byType={}, byOperator={}, byCategory={}, bySku={};
   let totalQtyToAV=0, totalQtyFromAV=0, totalEntriesCount=0, totalExitsCount=0;
   const dailyIn={}, dailyOut={};
 
   for(const t of transList){
-    // type
     if(!byType[t.type]) byType[t.type]={count:0,qty:0,skus:new Set()};
     byType[t.type].count++; byType[t.type].qty+=t.qty; byType[t.type].skus.add(t.skuId);
 
-    // operator
-    if(!byOperator[t.operator]) byOperator[t.operator]={count:0,qty:0,skus:new Set(),cats:{}};
+    if(!byOperator[t.operator]) byOperator[t.operator]={count:0,qty:0,qtyIn:0,qtyOut:0,skus:new Set(),cats:{}};
     byOperator[t.operator].count++; byOperator[t.operator].qty+=t.qty; byOperator[t.operator].skus.add(t.skuId);
     byOperator[t.operator].cats[t.category] = (byOperator[t.operator].cats[t.category]||0)+1;
+    if(t.isEntryAV) byOperator[t.operator].qtyIn  += t.qty;
+    if(t.isExitAV)  byOperator[t.operator].qtyOut += t.qty;
 
-    // category
     if(!byCategory[t.category]) byCategory[t.category]={count:0,qty:0,skus:new Set()};
     byCategory[t.category].count++; byCategory[t.category].qty+=t.qty; byCategory[t.category].skus.add(t.skuId);
 
-    // sku
     if(!bySku[t.skuId]) bySku[t.skuId]={count:0,qty:0,operators:new Set()};
     bySku[t.skuId].count++; bySku[t.skuId].qty+=t.qty; bySku[t.skuId].operators.add(t.operator);
 
@@ -1036,9 +969,6 @@ function topN(obj, key, n){
   return Object.entries(obj).sort((a,b)=>b[1][key]-a[1][key]).slice(0,n);
 }
 
-// =====================================================================
-// MASTER BUILD
-// =====================================================================
 function buildEverything(isFilterUpdate){
   if(!isFilterUpdate){
     populateFilterSelects();
@@ -1047,7 +977,6 @@ function buildEverything(isFilterUpdate){
   }
   const AGG = aggregate(FILTERED_TRANS);
   window.__AGG = AGG;
-
   buildKPIs(AGG);
   buildInsights(AGG);
   buildParetoCharts(AGG);
@@ -1059,21 +988,15 @@ function buildEverything(isFilterUpdate){
   buildHeatmap(AGG);
 }
 
-// =====================================================================
-// KPIs
-// =====================================================================
+// ── KPIs ─────────────────────────────────────────────────────────────────────
 function buildKPIs(AGG){
-  const skuIds = new Set(FILTERED_TRANS.map(t=>t.skuId));
-  // include all AV skus regardless of filter for "current" totals if no filters touch them
   const totalSkus = AV_SKUS.size;
   const totalPecas = Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0);
   const avgQty = totalSkus? totalPecas/totalSkus : 0;
   const totalOperators = Object.keys(AGG.byOperator).length;
-
   const topOp = topN(AGG.byOperator,'qty',1)[0];
   const topProc = topN(AGG.byType,'qty',1)[0];
   const topCat = topN(AGG.byCategory,'qty',1)[0];
-
   const cards = [
     {label:'Total de SKUs em AV', value: fmtNum(totalSkus), sub:'Localização '+AV_LOCATION},
     {label:'Total de Peças em AV', value: fmtNum(totalPecas), sub:'Saldo atual (On Hand)'},
@@ -1084,7 +1007,6 @@ function buildKPIs(AGG){
     {label:'Categoria Mais Impactada', value: topCat?topCat[0]:'-', sub: topCat?`${fmtNum(topCat[1].qty)} pçs`:'-'},
     {label:'Qtd. Total Movimentada p/ AV', value: fmtNum(AGG.totalQtyToAV), sub: `${fmtNum(AGG.totalEntriesCount)} entradas registradas`}
   ];
-
   document.getElementById('kpiGrid').innerHTML = cards.map(c=>`
     <div class="kpi">
       <div class="kpi-label">${c.label}</div>
@@ -1094,20 +1016,15 @@ function buildKPIs(AGG){
   `).join('');
 }
 
-// =====================================================================
-// INSIGHTS
-// =====================================================================
+// ── INSIGHTS ─────────────────────────────────────────────────────────────────
 function buildInsights(AGG){
   const insights = [];
   const totalQty = AGG.totalQtyToAV || 1;
   const totalCount = FILTERED_TRANS.filter(t=>t.isEntryAV).length || 1;
-
   const topOp = topN(AGG.byOperator,'qty',1)[0];
   const topProc = topN(AGG.byType,'qty',1)[0];
-  const topProcCount = topN(AGG.byType,'count',1)[0];
   const topCat = topN(AGG.byCategory,'qty',1)[0];
   const topSkuByCount = topN(AGG.bySku,'count',1)[0];
-  const topOpByQty = topN(AGG.byOperator,'qty',1)[0];
 
   if(topProc){
     const pctQty = (topProc[1].qty/totalQty*100);
@@ -1120,33 +1037,24 @@ function buildInsights(AGG){
     insights.push(`Os <b>5 principais operadores</b> concentram <b>${fmtPct(top5sum/totalQty*100)}</b> do volume total movimentado para AV.`);
     insights.push(`O operador <b>${topOp[0]}</b> é o mais associado ao AV, responsável por <b>${fmtNum(topOp[1].qty)}</b> peças em <b>${fmtNum(topOp[1].count)}</b> ocorrências.`);
   }
-  if(topCat){
-    insights.push(`A categoria <b>${topCat[0]}</b> é a mais impactada, com <b>${fmtNum(topCat[1].qty)}</b> peças movimentadas para AV.`);
-  }
+  if(topCat) insights.push(`A categoria <b>${topCat[0]}</b> é a mais impactada, com <b>${fmtNum(topCat[1].qty)}</b> peças movimentadas para AV.`);
   if(topSkuByCount){
     const sp = SKU_PROFILE[topSkuByCount[0]];
-    insights.push(`O SKU mais reincidente é <b>${topSkuByCount[0]}</b> (${sp?sp.skuName:''}), com <b>${fmtNum(topSkuByCount[1].count)}</b> movimentações registradas.`);
+    insights.push(`O SKU mais reincidente é <b>${topSkuByCount[0]}</b> (${sp?sp.skuName:''}), com <b>${fmtNum(topSkuByCount[1].count)}</b> movimentações.`);
   }
-  // top5 process accumulated
   const top5proc = topN(AGG.byType,'qty',5);
   const top5procSum = top5proc.reduce((a,p)=>a+p[1].qty,0);
-  if(top5proc.length){
-    insights.push(`Os <b>5 principais processos</b> concentram <b>${fmtPct(top5procSum/totalQty*100)}</b> do volume total movimentado para AV.`);
-  }
+  if(top5proc.length) insights.push(`Os <b>5 principais processos</b> concentram <b>${fmtPct(top5procSum/totalQty*100)}</b> do volume total movimentado para AV.`);
 
   document.getElementById('insightsBox').innerHTML = insights.map(i=>`
     <div class="insight"><i class="fa-solid fa-circle-info"></i><div>${i}</div></div>
-  `).join('') || '<div class="muted">Sem dados suficientes para gerar insights.</div>';
+  `).join('') || '<div class="muted">Sem dados suficientes.</div>';
 }
 
-// =====================================================================
-// CHARTS - Pareto
-// =====================================================================
-function destroyChart(id){
-  if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; }
-}
+// ── PARETO CHARTS ─────────────────────────────────────────────────────────────
+function destroyChart(id){ if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; } }
+
 function buildParetoCharts(AGG){
-  // Type pareto
   const typeData = topN(AGG.byType,'qty',10);
   destroyChart('chartParetoType');
   CHARTS['chartParetoType'] = new Chart(document.getElementById('chartParetoType'), {
@@ -1168,7 +1076,6 @@ function buildParetoCharts(AGG){
     }
   });
 
-  // Operator pareto
   const opData = topN(AGG.byOperator,'qty',10);
   destroyChart('chartParetoOp');
   CHARTS['chartParetoOp'] = new Chart(document.getElementById('chartParetoOp'), {
@@ -1191,60 +1098,130 @@ function buildParetoCharts(AGG){
   });
 }
 
-// =====================================================================
-// CHARTS - Daily evolution
-// =====================================================================
+// ── DAILY CHARTS — UNIFIED ────────────────────────────────────────────────────
 function buildDailyCharts(AGG){
   const allDates = new Set([...Object.keys(AGG.dailyIn), ...Object.keys(AGG.dailyOut)]);
   const sortedDates = [...allDates].sort();
-  const inSeries = sortedDates.map(d=>AGG.dailyIn[d]||0);
-  const outSeries = sortedDates.map(d=>AGG.dailyOut[d]||0);
+  const inSeries  = sortedDates.map(d => AGG.dailyIn[d]  || 0);
+  const outSeries = sortedDates.map(d => AGG.dailyOut[d] || 0);
 
   let cumBalance = 0;
-  const balanceSeries = sortedDates.map((d,i)=>{
-    cumBalance += (inSeries[i]-outSeries[i]);
+  const balanceSeries = sortedDates.map((d,i) => {
+    cumBalance += (inSeries[i] - outSeries[i]);
     return cumBalance;
   });
 
-  const labels = sortedDates.map(d=> new Date(d+'T00:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}));
+  const labels = sortedDates.map(d =>
+    new Date(d+'T00:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})
+  );
 
-  destroyChart('chartDailyIn');
-  CHARTS['chartDailyIn'] = new Chart(document.getElementById('chartDailyIn'), {
-    type:'bar',
-    data:{labels, datasets:[{label:'Entradas AV', data:inSeries, backgroundColor:'#E0392F'}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+  // ── Unified chart: Entradas x Saídas por dia ─────────────────────────────
+  destroyChart('chartDailyInOut');
+  CHARTS['chartDailyInOut'] = new Chart(document.getElementById('chartDailyInOut'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '↑ Entradas AV',
+          data: inSeries,
+          backgroundColor: 'rgba(224,57,47,0.82)',
+          borderColor: '#E0392F',
+          borderWidth: 1,
+          borderRadius: 3,
+          order: 2
+        },
+        {
+          label: '↓ Saídas AV',
+          data: outSeries,
+          backgroundColor: 'rgba(31,174,124,0.82)',
+          borderColor: '#1FAE7C',
+          borderWidth: 1,
+          borderRadius: 3,
+          order: 2
+        },
+        {
+          label: 'Saldo do Dia (Ent−Saí)',
+          type: 'line',
+          data: sortedDates.map((_,i) => inSeries[i] - outSeries[i]),
+          borderColor: '#1A1D29',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.25,
+          yAxisID: 'y',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              const ent = items.find(i=>i.dataset.label.startsWith('↑'));
+              const sai = items.find(i=>i.dataset.label.startsWith('↓'));
+              if(ent && sai){
+                const s = (ent.raw||0) - (sai.raw||0);
+                return ['─────────────────', `Saldo do dia: ${s>=0?'+':''}${fmtNum(s)}`];
+              }
+              return [];
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: false },
+        y: { beginAtZero: true, title: { display: true, text: 'Quantidade' } }
+      }
+    }
   });
 
-  destroyChart('chartDailyOut');
-  CHARTS['chartDailyOut'] = new Chart(document.getElementById('chartDailyOut'), {
-    type:'bar',
-    data:{labels, datasets:[{label:'Saídas AV', data:outSeries, backgroundColor:'#1FAE7C'}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
-  });
-
+  // ── Balance accumulated ───────────────────────────────────────────────────
   destroyChart('chartDailyBalance');
   CHARTS['chartDailyBalance'] = new Chart(document.getElementById('chartDailyBalance'), {
-    type:'line',
-    data:{labels, datasets:[{label:'Saldo Acumulado AV', data:balanceSeries, borderColor:'#EE4D2D', backgroundColor:'rgba(238,77,45,.12)', fill:true, tension:.25}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Saldo Líquido Acumulado',
+        data: balanceSeries,
+        borderColor: '#EE4D2D',
+        backgroundColor: 'rgba(238,77,45,.12)',
+        fill: true,
+        tension: .25,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { title: { display: true, text: 'Saldo Acumulado' } } }
+    }
   });
 }
 
-// =====================================================================
-// PAGE 2: OPERATORS TABLE
-// =====================================================================
+// ── OPERATOR TABLE — ENTRADA x SAÍDA ─────────────────────────────────────────
 let dtOperators=null;
 function buildOperatorTable(AGG){
-  const totalQty = AGG.totalQtyToAV || Object.values(AGG.byOperator).reduce((a,o)=>a+o[1]?.qty||0,0) || 1;
+  const totalQtyIn = Object.values(AGG.byOperator).reduce((a,o)=>a+(o.qtyIn||0),0) || 1;
   const rows = Object.entries(AGG.byOperator).map(([op,d])=>{
     const predominant = Object.entries(d.cats).sort((a,b)=>b[1]-a[1])[0];
+    const saldo = (d.qtyIn||0) - (d.qtyOut||0);
     return [
       op,
       d.count,
-      d.qty,
+      d.qtyIn||0,
+      d.qtyOut||0,
+      saldo,
       d.skus.size,
-      (d.qty/ (Object.values(AGG.byOperator).reduce((a,o)=>a+o.qty,0)||1) *100),
-      predominant?predominant[0]:'-'
+      ((d.qtyIn||0) / totalQtyIn * 100),
+      predominant ? predominant[0] : '-'
     ];
   });
 
@@ -1255,46 +1232,46 @@ function buildOperatorTable(AGG){
     columns:[
       {title:'Operador'},
       {title:'Ocorrências'},
-      {title:'Quantidade'},
+      {title:'↑ Entrada AV'},
+      {title:'↓ Saída AV'},
+      {title:'Saldo (Ent−Saí)'},
       {title:'SKUs Impactados'},
-      {title:'Participação %'},
+      {title:'Part. % Entradas'},
       {title:'Categoria Predominante'}
     ],
     order:[[2,'desc']],
-    pageLength:10,
+    pageLength:15,
     columnDefs:[
-      {targets:[1,2,3], render:(d)=>fmtNum(d)},
-      {targets:[4], render:(d)=>fmtPct(d)}
+      {targets:[1,2,3,5], render:(d)=>fmtNum(d)},
+      {targets:[4], render:(d,type)=>{
+        if(type!=='display') return d;
+        const color = d>0 ? '#E0392F' : (d<0 ? '#1FAE7C' : '#5C6273');
+        const sign  = d>0 ? '+' : '';
+        return `<b style="color:${color}">${sign}${fmtNum(d)}</b>`;
+      }},
+      {targets:[6], render:(d)=>fmtPct(d)}
     ],
     language:{url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'}
   });
 }
 
-// =====================================================================
-// PAGE 3: PROCESS ANALYSIS
-// =====================================================================
+// ── PROCESS PAGE ──────────────────────────────────────────────────────────────
 let dtProcess=null;
 function buildProcessPage(AGG){
   const totalQty = Object.values(AGG.byType).reduce((a,t)=>a+t.qty,0) || 1;
   const sorted = topN(AGG.byType,'qty', Object.keys(AGG.byType).length);
-
   let cum=0;
   const rows = sorted.map(([type,d])=>{
     const pct = d.qty/totalQty*100;
     cum += pct;
     return [type, d.count, d.qty, d.skus.size, pct, cum];
   });
-
   if(dtProcess) dtProcess.destroy();
   $('#tblProcess tbody').empty();
   dtProcess = $('#tblProcess').DataTable({
     data: rows,
-    columns:[
-      {title:'Transaction Type'},{title:'Ocorrências'},{title:'Quantidade'},
-      {title:'SKUs Afetados'},{title:'Participação %'},{title:'% Acumulado'}
-    ],
-    order:[[2,'desc']],
-    pageLength:10,
+    columns:[{title:'Transaction Type'},{title:'Ocorrências'},{title:'Quantidade'},{title:'SKUs Afetados'},{title:'Participação %'},{title:'% Acumulado'}],
+    order:[[2,'desc']], pageLength:10,
     columnDefs:[
       {targets:[1,2,3], render:(d)=>fmtNum(d)},
       {targets:[4,5], render:(d)=>fmtPct(d)}
@@ -1302,7 +1279,6 @@ function buildProcessPage(AGG){
     language:{url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'}
   });
 
-  // Pareto chart
   const top10 = sorted.slice(0,10);
   let cum10=0;
   const cumLine = top10.map(([t,d])=>{ cum10 += d.qty/totalQty*100; return cum10; });
@@ -1325,7 +1301,6 @@ function buildProcessPage(AGG){
     }
   });
 
-  // pie
   const top6 = sorted.slice(0,6);
   const otherSum = sorted.slice(6).reduce((a,p)=>a+p[1].qty,0);
   const pieLabels = top6.map(d=>d[0]).concat(otherSum>0?['Outros']:[]);
@@ -1339,9 +1314,7 @@ function buildProcessPage(AGG){
   });
 }
 
-// =====================================================================
-// PAGE 4: SKU ANALYSIS
-// =====================================================================
+// ── SKU ANALYSIS ──────────────────────────────────────────────────────────────
 function populateSkuDatalist(){
   const dl = document.getElementById('skuList');
   dl.innerHTML = [...AV_SKUS].slice(0,2000).map(id=>{
@@ -1353,12 +1326,9 @@ function populateSkuDatalist(){
 function loadSkuAnalysis(){
   const query = document.getElementById('skuSearchInput').value.trim();
   if(!query) return;
-
   let skuId = null;
-  if(AV_SKUS.has(query)){
-    skuId = query;
-  } else {
-    // search by name
+  if(AV_SKUS.has(query)){ skuId = query; }
+  else {
     const lower = query.toLowerCase();
     for(const id of AV_SKUS){
       const p = SKU_PROFILE[id];
@@ -1366,14 +1336,10 @@ function loadSkuAnalysis(){
       if(id.toLowerCase().includes(lower)){ skuId = id; break; }
     }
   }
-  if(!skuId){
-    alert('SKU não encontrado na base de AV.');
-    return;
-  }
+  if(!skuId){ alert('SKU não encontrado na base de AV.'); return; }
 
   const p = SKU_PROFILE[skuId];
   const txs = SKU_TRANS[skuId] || [];
-
   document.getElementById('skuEmptyState').style.display='none';
   document.getElementById('skuResultArea').style.display='block';
 
@@ -1388,20 +1354,17 @@ function loadSkuAnalysis(){
     <div class="kpi"><div class="kpi-label">Nº de Transações</div><div class="kpi-value mono">${fmtNum(p.transCount)}</div><div class="kpi-sub">${p.first?'Primeira: '+fmtDate(p.first.date):'-'}</div></div>
   `;
 
-  // operators table for this sku
   const opAgg = {};
   for(const t of txs){
     if(!opAgg[t.operator]) opAgg[t.operator]={count:0,qty:0};
     opAgg[t.operator].count++; opAgg[t.operator].qty+=t.qty;
   }
-  const opRows = Object.entries(opAgg).sort((a,b)=>b[1].qty-a[1].qty);
-  document.getElementById('skuOperatorsTbl').innerHTML = opRows.map(([op,d])=>`
+  document.getElementById('skuOperatorsTbl').innerHTML = Object.entries(opAgg).sort((a,b)=>b[1].qty-a[1].qty).map(([op,d])=>`
     <tr><td>${op}</td><td>${fmtNum(d.count)}</td><td>${fmtNum(d.qty)}</td></tr>
   `).join('') || '<tr><td colspan="3" class="text-muted text-center">Sem dados</td></tr>';
 
-  // ---- Cross-reference: On-rack Qty x inbound movements (To Location = AV) ----
   document.getElementById('crossOnRackQty').innerText = fmtNum(p.currentQty);
-  const inbound = txs.filter(t=>t.isEntryAV).slice().reverse(); // most recent first
+  const inbound = txs.filter(t=>t.isEntryAV).slice().reverse();
   document.getElementById('skuCrossTbl').innerHTML = inbound.map(t=>`
     <tr>
       <td class="mono">${fmtDate(t.date)}</td>
@@ -1412,9 +1375,8 @@ function loadSkuAnalysis(){
       <td><b>${fmtNum(t.qty)}</b></td>
       <td>${fmtNum(t.closeQty)}</td>
     </tr>
-  `).join('') || '<tr><td colspan="7" class="text-muted text-center">Nenhuma movimentação de entrada (To Location = AV) encontrada para este SKU.</td></tr>';
+  `).join('') || '<tr><td colspan="7" class="text-muted text-center">Nenhuma entrada no AV encontrada.</td></tr>';
 
-  // origin breakdown (From Location)
   const originAgg = {};
   for(const t of inbound){
     const loc = t.fromLoc || '(não informado)';
@@ -1423,24 +1385,20 @@ function loadSkuAnalysis(){
   }
   const totalInboundQty = inbound.reduce((a,t)=>a+t.qty,0);
   const originRows = Object.entries(originAgg).sort((a,b)=>b[1].qty-a[1].qty);
-  const coverage = totalInboundQty>0 ? Math.min(100, (totalInboundQty/Math.max(p.currentQty,1))*100) : 0;
   document.getElementById('crossSummary').innerHTML = `
     <div class="d-flex flex-wrap gap-2 mb-2">
       ${originRows.map(([loc,d])=>`<span class="tree-pill qty mono">${loc}: ${fmtNum(d.qty)} pçs (${d.count} mov.)</span>`).join('')}
     </div>
     <div class="muted" style="font-size:.78rem;">
-      Total movimentado para AV: <b>${fmtNum(totalInboundQty)}</b> peças vs. saldo atual On-rack Qty: <b>${fmtNum(p.currentQty)}</b> peças
+      Total movimentado para AV: <b>${fmtNum(totalInboundQty)}</b> peças vs. saldo atual: <b>${fmtNum(p.currentQty)}</b>
       ${p.saidas>0 ? ` (descontadas <b>${fmtNum(p.saidas)}</b> peças retiradas do AV).` : '.'}
     </div>
   `;
 
-
-  // timeline
   document.getElementById('skuTimeline').innerHTML = txs.map(t=>{
-    let dotClass='';
-    if(t.isEntryAV) dotClass='in';
-    if(t.isExitAV) dotClass='out';
-    let icon = t.isEntryAV?'fa-arrow-right-to-bracket':(t.isExitAV?'fa-arrow-right-from-bracket':'fa-right-left');
+    let dotClass='', icon='fa-right-left';
+    if(t.isEntryAV){ dotClass='in'; icon='fa-arrow-right-to-bracket'; }
+    if(t.isExitAV){ dotClass='out'; icon='fa-arrow-right-from-bracket'; }
     return `
     <div class="tl-item">
       <div class="tl-dot ${dotClass}"><i class="fa-solid ${icon}" style="font-size:.55rem;color:#fff;"></i></div>
@@ -1451,43 +1409,25 @@ function loadSkuAnalysis(){
         </div>
         <div class="mt-1" style="font-size:.76rem;">
           <span class="muted">De:</span> <span class="mono">${t.fromLoc||'-'}</span>
-          &nbsp;→&nbsp;
-          <span class="muted">Para:</span> <span class="mono">${t.toLoc||'-'}</span>
-          &nbsp;|&nbsp; <span class="muted">Qtd:</span> <b>${fmtNum(t.qty)}</b>
-          &nbsp;|&nbsp; <span class="muted">Close Qty:</span> <b>${fmtNum(t.closeQty)}</b>
+          &nbsp;→&nbsp;<span class="muted">Para:</span> <span class="mono">${t.toLoc||'-'}</span>
+          &nbsp;|&nbsp;<span class="muted">Qtd:</span> <b>${fmtNum(t.qty)}</b>
+          &nbsp;|&nbsp;<span class="muted">Close Qty:</span> <b>${fmtNum(t.closeQty)}</b>
         </div>
       </div>
     </div>`;
-  }).join('') || '<div class="text-muted text-center py-3">Sem movimentações registradas para este SKU.</div>';
+  }).join('') || '<div class="text-muted text-center py-3">Sem movimentações.</div>';
 }
 
-// =====================================================================
-// PAGE 5: ROOT CAUSE TREE
-// =====================================================================
-function toggleTreeMode(){
-  TREE_MODE = TREE_MODE==='qty'?'count':'qty';
-  document.getElementById('treeModeLabel').innerText = TREE_MODE==='qty'?'Quantidade':'Ocorrência';
-  buildTree(window.__AGG);
-}
-function expandAllTree(){
-  document.querySelectorAll('.tree-children').forEach(el=>el.classList.add('show'));
-  document.querySelectorAll('.tree-toggle').forEach(el=>el.classList.add('open'));
-}
-function collapseAllTree(){
-  document.querySelectorAll('.tree-children').forEach(el=>el.classList.remove('show'));
-  document.querySelectorAll('.tree-toggle').forEach(el=>el.classList.remove('open'));
-}
-function treeToggleClick(el){
-  el.classList.toggle('open');
-  el.nextElementSibling.classList.toggle('show');
-}
-
+// ── ROOT CAUSE TREE ───────────────────────────────────────────────────────────
+function toggleTreeMode(){ TREE_MODE = TREE_MODE==='qty'?'count':'qty'; document.getElementById('treeModeLabel').innerText = TREE_MODE==='qty'?'Quantidade':'Ocorrência'; buildTree(window.__AGG); }
+function expandAllTree(){ document.querySelectorAll('.tree-children').forEach(el=>el.classList.add('show')); document.querySelectorAll('.tree-toggle').forEach(el=>el.classList.add('open')); }
+function collapseAllTree(){ document.querySelectorAll('.tree-children').forEach(el=>el.classList.remove('show')); document.querySelectorAll('.tree-toggle').forEach(el=>el.classList.remove('open')); }
+function treeToggleClick(el){ el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 function metricVal(d){ return TREE_MODE==='qty'? d.qty : d.count; }
 function metricLabel(){ return TREE_MODE==='qty'?'pçs':'ocorr.'; }
 
 function buildTree(AGG){
   if(!AGG) return;
-  // Level 1: Category
   const catGroups = {};
   for(const t of FILTERED_TRANS){
     if(!catGroups[t.category]) catGroups[t.category] = {count:0, qty:0, types:{}};
@@ -1502,10 +1442,8 @@ function buildTree(AGG){
     if(!skuG[t.skuId]) skuG[t.skuId] = {count:0, qty:0, name: SKU_PROFILE[t.skuId]?SKU_PROFILE[t.skuId].skuName:t.skuName};
     skuG[t.skuId].count++; skuG[t.skuId].qty += t.qty;
   }
-
   const sortedCats = Object.entries(catGroups).sort((a,b)=>metricVal(b[1])-metricVal(a[1]));
-
-  let html = '';
+  let html='';
   for(const [cat,catData] of sortedCats){
     const sortedTypes = Object.entries(catData.types).sort((a,b)=>metricVal(b[1])-metricVal(a[1]));
     let typesHtml='';
@@ -1519,319 +1457,144 @@ function buildTree(AGG){
             <span class="mono">${sku} <span class="muted">${skuData.name||''}</span></span>
             <span class="${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(skuData))} ${metricLabel()}</span>
           </div>`).join('');
-        opsHtml += `
-          <div class="tree-node">
-            <div class="tree-toggle" onclick="treeToggleClick(this)">
-              <i class="fa-solid fa-chevron-right chev"></i>
-              <i class="fa-solid fa-user"></i> ${op}
-              <span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(opData))} ${metricLabel()}</span>
-            </div>
-            <div class="tree-children">${skusHtml}</div>
-          </div>`;
+        opsHtml += `<div class="tree-node"><div class="tree-toggle" onclick="treeToggleClick(this)"><i class="fa-solid fa-chevron-right chev"></i><i class="fa-solid fa-user"></i> ${op}<span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(opData))} ${metricLabel()}</span></div><div class="tree-children">${skusHtml}</div></div>`;
       }
-      typesHtml += `
-        <div class="tree-node">
-          <div class="tree-toggle" onclick="treeToggleClick(this)">
-            <i class="fa-solid fa-chevron-right chev"></i>
-            <i class="fa-solid fa-gears"></i> ${type}
-            <span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(typeData))} ${metricLabel()}</span>
-          </div>
-          <div class="tree-children">${opsHtml}</div>
-        </div>`;
+      typesHtml += `<div class="tree-node"><div class="tree-toggle" onclick="treeToggleClick(this)"><i class="fa-solid fa-chevron-right chev"></i><i class="fa-solid fa-gears"></i> ${type}<span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(typeData))} ${metricLabel()}</span></div><div class="tree-children">${opsHtml}</div></div>`;
     }
-    html += `
-      <div class="tree-node">
-        <div class="tree-toggle" onclick="treeToggleClick(this)">
-          <i class="fa-solid fa-chevron-right chev"></i>
-          <i class="fa-solid fa-tag"></i> ${cat}
-          <span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(catData))} ${metricLabel()}</span>
-        </div>
-        <div class="tree-children">${typesHtml}</div>
-      </div>`;
+    html += `<div class="tree-node"><div class="tree-toggle" onclick="treeToggleClick(this)"><i class="fa-solid fa-chevron-right chev"></i><i class="fa-solid fa-tag"></i> ${cat}<span class="ms-auto ${TREE_MODE==='qty'?'tree-pill qty':'tree-pill'}">${fmtNum(metricVal(catData))} ${metricLabel()}</span></div><div class="tree-children">${typesHtml}</div></div>`;
   }
-
   document.getElementById('rootTreeContainer').innerHTML = `
-    <div class="tree-node">
-      <div class="tree-toggle open" onclick="treeToggleClick(this)" style="background:var(--ink);color:#fff;border-color:var(--ink);">
-        <i class="fa-solid fa-chevron-right chev" style="color:#fff;"></i>
-        <i class="fa-solid fa-warehouse"></i> AV — ${AV_LOCATION}
-        <span class="ms-auto tree-pill" style="background:var(--shopee);color:#fff;">${fmtNum(FILTERED_TRANS.reduce((a,t)=>a+(TREE_MODE==='qty'?t.qty:1),0))} ${metricLabel()}</span>
-      </div>
-      <div class="tree-children show">${html || '<div class="text-muted p-2">Sem dados para os filtros aplicados.</div>'}</div>
-    </div>
+    <div class="tree-node"><div class="tree-toggle open" onclick="treeToggleClick(this)" style="background:var(--ink);color:#fff;border-color:var(--ink);"><i class="fa-solid fa-chevron-right chev" style="color:#fff;"></i><i class="fa-solid fa-warehouse"></i> AV — ${AV_LOCATION}<span class="ms-auto tree-pill" style="background:var(--shopee);color:#fff;">${fmtNum(FILTERED_TRANS.reduce((a,t)=>a+(TREE_MODE==='qty'?t.qty:1),0))} ${metricLabel()}</span></div><div class="tree-children show">${html||'<div class="text-muted p-2">Sem dados.</div>'}</div></div>
   `;
 }
 
-// =====================================================================
-// PAGE 6: HEATMAP
-// =====================================================================
-function toggleHeatMode(){
-  HEAT_MODE = HEAT_MODE==='count'?'qty':'count';
-  document.getElementById('heatModeLabel').innerText = HEAT_MODE==='count'?'Ocorrências':'Quantidade';
-  buildHeatmap(window.__AGG);
-}
+// ── HEATMAP ───────────────────────────────────────────────────────────────────
+function toggleHeatMode(){ HEAT_MODE = HEAT_MODE==='count'?'qty':'count'; document.getElementById('heatModeLabel').innerText = HEAT_MODE==='count'?'Ocorrências':'Quantidade'; buildHeatmap(window.__AGG); }
 function buildHeatmap(AGG){
   if(!AGG) return;
   const operators = topN(AGG.byOperator,'qty',20).map(d=>d[0]);
   const types = topN(AGG.byType,'qty',12).map(d=>d[0]);
-
-  const matrix = {};
-  let maxVal = 0;
+  const matrix = {}; let maxVal=0;
   for(const t of FILTERED_TRANS){
-    if(!operators.includes(t.operator) || !types.includes(t.type)) continue;
+    if(!operators.includes(t.operator)||!types.includes(t.type)) continue;
     const key = t.operator+'|'+t.type;
-    if(!matrix[key]) matrix[key] = {count:0, qty:0};
-    matrix[key].count++; matrix[key].qty += t.qty;
+    if(!matrix[key]) matrix[key]={count:0,qty:0};
+    matrix[key].count++; matrix[key].qty+=t.qty;
     const v = HEAT_MODE==='count'?matrix[key].count:matrix[key].qty;
     if(v>maxVal) maxVal=v;
   }
-
-  let html = '<table><thead><tr><th class="rowhead">Operador \\ Processo</th>';
-  for(const type of types) html += `<th>${type}</th>`;
-  html += '</tr></thead><tbody>';
-
+  let html='<table><thead><tr><th class="rowhead">Operador \\ Processo</th>';
+  for(const type of types) html+=`<th>${type}</th>`;
+  html+='</tr></thead><tbody>';
   for(const op of operators){
-    html += `<tr><th class="rowhead">${op}</th>`;
+    html+=`<tr><th class="rowhead">${op}</th>`;
     for(const type of types){
-      const cell = matrix[op+'|'+type];
-      const val = cell ? (HEAT_MODE==='count'?cell.count:cell.qty) : 0;
-      const intensity = maxVal? val/maxVal : 0;
-      const bg = intensity===0 ? '#F1F2F5' : `rgba(238,77,45,${0.15+intensity*0.85})`;
-      const color = intensity>0.5?'#fff':'#1A1D29';
-      html += `<td><div class="heatcell" style="background:${bg};color:${color};">${val? fmtNum(val):''}</div></td>`;
+      const cell=matrix[op+'|'+type];
+      const val=cell?(HEAT_MODE==='count'?cell.count:cell.qty):0;
+      const intensity=maxVal?val/maxVal:0;
+      const bg=intensity===0?'#F1F2F5':`rgba(238,77,45,${0.15+intensity*0.85})`;
+      const color=intensity>0.5?'#fff':'#1A1D29';
+      html+=`<td><div class="heatcell" style="background:${bg};color:${color};">${val?fmtNum(val):''}</div></td>`;
     }
-    html += '</tr>';
+    html+='</tr>';
   }
-  html += '</tbody></table>';
-  document.getElementById('heatmapContainer').innerHTML = html;
+  html+='</tbody></table>';
+  document.getElementById('heatmapContainer').innerHTML=html;
 }
 
-// =====================================================================
-// PAGE 7: TOP OFFENDERS
-// =====================================================================
+// ── TOP OFFENDERS ─────────────────────────────────────────────────────────────
 let dtTopSku=null;
 function buildTopOffenders(AGG){
-  // Top 20 SKUs by current AV quantity
-  const skuRanking = [...AV_SKUS].map(id=>{
-    const p = SKU_PROFILE[id];
-    return {
-      id, name:p.skuName, qty:p.currentQty, moves:p.transCount,
-      ops:p.operators.length, cat:p.category
-    };
-  }).sort((a,b)=>b.qty-a.qty).slice(0,20);
-
+  const skuRanking = [...AV_SKUS].map(id=>{ const p=SKU_PROFILE[id]; return {id,name:p.skuName,qty:p.currentQty,moves:p.transCount,ops:p.operators.length,cat:p.category}; }).sort((a,b)=>b.qty-a.qty).slice(0,20);
   if(dtTopSku) dtTopSku.destroy();
   $('#tblTopSku tbody').empty();
   dtTopSku = $('#tblTopSku').DataTable({
-    data: skuRanking.map((r,i)=>[i+1, r.id, r.name, r.qty, r.moves, r.ops, r.cat]),
-    columns:[
-      {title:'#'},{title:'SKU'},{title:'Descrição'},{title:'Qtd em AV'},
-      {title:'Movimentações'},{title:'Operadores'},{title:'Categoria'}
-    ],
-    order:[],
-    pageLength:10,
-    columnDefs:[
-      {targets:[0], render:(d)=>rankBadge(d)},
-      {targets:[3,4,5], render:(d)=>fmtNum(d)}
-    ],
+    data: skuRanking.map((r,i)=>[i+1,r.id,r.name,r.qty,r.moves,r.ops,r.cat]),
+    columns:[{title:'#'},{title:'SKU'},{title:'Descrição'},{title:'Qtd em AV'},{title:'Movimentações'},{title:'Operadores'},{title:'Categoria'}],
+    order:[], pageLength:10,
+    columnDefs:[{targets:[0],render:(d)=>rankBadge(d)},{targets:[3,4,5],render:(d)=>fmtNum(d)}],
     language:{url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'}
   });
-
-  // Top 20 operators
-  const opRanking = topN(AGG.byOperator,'qty',20);
-  document.getElementById('tblTopOperators').innerHTML = opRanking.map(([op,d],i)=>`
-    <tr><td>${rankBadge(i+1)}</td><td>${op}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>
-  `).join('');
-
-  // Top 20 process
-  const procRanking = topN(AGG.byType,'qty',20);
-  document.getElementById('tblTopProcess').innerHTML = procRanking.map(([t,d],i)=>`
-    <tr><td>${rankBadge(i+1)}</td><td>${t}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>
-  `).join('');
-
-  // Top 20 categories
-  const catRanking = topN(AGG.byCategory,'qty',20);
-  document.getElementById('tblTopCategory').innerHTML = catRanking.map(([c,d],i)=>`
-    <tr><td>${rankBadge(i+1)}</td><td>${c}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>
-  `).join('');
+  const opRanking=topN(AGG.byOperator,'qty',20);
+  document.getElementById('tblTopOperators').innerHTML=opRanking.map(([op,d],i)=>`<tr><td>${rankBadge(i+1)}</td><td>${op}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>`).join('');
+  const procRanking=topN(AGG.byType,'qty',20);
+  document.getElementById('tblTopProcess').innerHTML=procRanking.map(([t,d],i)=>`<tr><td>${rankBadge(i+1)}</td><td>${t}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>`).join('');
+  const catRanking=topN(AGG.byCategory,'qty',20);
+  document.getElementById('tblTopCategory').innerHTML=catRanking.map(([c,d],i)=>`<tr><td>${rankBadge(i+1)}</td><td>${c}</td><td>${fmtNum(d.qty)}</td><td>${fmtNum(d.count)}</td></tr>`).join('');
 }
-function rankBadge(n){
-  let cls='';
-  if(n===1) cls='top1'; else if(n===2) cls='top2'; else if(n===3) cls='top3';
-  return `<span class="rank-badge ${cls}">${n}</span>`;
-}
+function rankBadge(n){ let cls=''; if(n===1)cls='top1'; else if(n===2)cls='top2'; else if(n===3)cls='top3'; return `<span class="rank-badge ${cls}">${n}</span>`; }
 
-// =====================================================================
-// NAVIGATION
-// =====================================================================
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
 document.getElementById('navtabs').addEventListener('click', e=>{
-  const btn = e.target.closest('.navtab');
-  if(!btn) return;
+  const btn=e.target.closest('.navtab'); if(!btn) return;
   document.querySelectorAll('.navtab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(btn.dataset.page).classList.add('active');
 });
 
-// =====================================================================
-// EXPORTS
-// =====================================================================
+// ── EXPORTS ───────────────────────────────────────────────────────────────────
 function exportTreatedData(){
-  const wb = XLSX.utils.book_new();
-
-  // Sheet 1: SKU profile summary
-  const skuRows = [...AV_SKUS].map(id=>{
-    const p = SKU_PROFILE[id];
-    return {
-      'SKU ID': id,
-      'SKU Name': p.skuName,
-      'Categoria': p.category,
-      'Qtd Atual AV': p.currentQty,
-      'Entradas AV': p.entradas,
-      'Saidas AV': p.saidas,
-      'Saldo Liquido': p.saldoLiquido,
-      'Operadores Envolvidos': p.operators.join(', '),
-      'Processos Envolvidos': p.processes.join(', '),
-      'Nº Transacoes': p.transCount,
-      'Primeira Movimentacao': p.first?fmtDate(p.first.date):'',
-      'Ultima Movimentacao': p.last?fmtDate(p.last.date):'',
-      'Ultima Entrada AV': p.lastEntry?fmtDate(p.lastEntry.date):'',
-      'Ultima Saida AV': p.lastExit?fmtDate(p.lastExit.date):''
-    };
-  });
-  const ws1 = XLSX.utils.json_to_sheet(skuRows);
-  XLSX.utils.book_append_sheet(wb, ws1, 'Resumo SKUs AV');
-
-  // Sheet 2: All AV transactions
-  const txRows = ALL_AV_TRANS.map(t=>({
-    'Data/Hora': t.date?fmtDate(t.date):'',
-    'SKU ID': t.skuId,
-    'SKU Name': t.skuName,
-    'Categoria': t.category,
-    'Transaction Type': t.type,
-    'Operador': t.operator,
-    'From Location': t.fromLoc,
-    'To Location': t.toLoc,
-    'Quantidade': t.qty,
-    'Close Quantity': t.closeQty,
-    'Task ID': t.taskId,
-    'Entrada AV': t.isEntryAV?'Sim':'Não',
-    'Saida AV': t.isExitAV?'Sim':'Não'
-  }));
-  const ws2 = XLSX.utils.json_to_sheet(txRows);
-  XLSX.utils.book_append_sheet(wb, ws2, 'Movimentacoes AV');
-
-  XLSX.writeFile(wb, 'AV_Base_Tratada_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  const wb=XLSX.utils.book_new();
+  const skuRows=[...AV_SKUS].map(id=>{ const p=SKU_PROFILE[id]; return {'SKU ID':id,'SKU Name':p.skuName,'Categoria':p.category,'Qtd Atual AV':p.currentQty,'Entradas AV':p.entradas,'Saidas AV':p.saidas,'Saldo Liquido':p.saldoLiquido,'Operadores':p.operators.join(', '),'Processos':p.processes.join(', '),'Nº Transacoes':p.transCount,'Primeira Movimentacao':p.first?fmtDate(p.first.date):'','Ultima Movimentacao':p.last?fmtDate(p.last.date):''}; });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(skuRows),'Resumo SKUs AV');
+  const txRows=ALL_AV_TRANS.map(t=>({'Data/Hora':t.date?fmtDate(t.date):'','SKU ID':t.skuId,'SKU Name':t.skuName,'Categoria':t.category,'Transaction Type':t.type,'Operador':t.operator,'From Location':t.fromLoc,'To Location':t.toLoc,'Quantidade':t.qty,'Close Quantity':t.closeQty,'Task ID':t.taskId,'Entrada AV':t.isEntryAV?'Sim':'Não','Saida AV':t.isExitAV?'Sim':'Não'}));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(txRows),'Movimentacoes AV');
+  XLSX.writeFile(wb,'AV_Base_Tratada_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
 
 async function exportExecutiveReport(){
   showLoader('Gerando relatório executivo PDF...');
   setProgress(10);
   await new Promise(r=>setTimeout(r,100));
-
   try{
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p','mm','a4');
-    const pageW = pdf.internal.pageSize.getWidth();
-    const margin = 12;
-    let y = 15;
-
-    // Header
-    pdf.setFillColor(238,77,45);
-    pdf.rect(0,0,pageW,18,'F');
-    pdf.setTextColor(255,255,255);
-    pdf.setFontSize(14);
-    pdf.setFont(undefined,'bold');
-    pdf.text('Relatório Executivo — Investigação de Estoque AV', margin, 11);
-    pdf.setFontSize(8);
-    pdf.setFont(undefined,'normal');
-    pdf.text(AV_LOCATION + ' — Gerado em ' + new Date().toLocaleString('pt-BR'), margin, 16);
-    pdf.setTextColor(0,0,0);
-    y = 26;
-
-    // KPIs
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF('p','mm','a4');
+    const pageW=pdf.internal.pageSize.getWidth(), margin=12;
+    let y=15;
+    pdf.setFillColor(238,77,45); pdf.rect(0,0,pageW,18,'F');
+    pdf.setTextColor(255,255,255); pdf.setFontSize(14); pdf.setFont(undefined,'bold');
+    pdf.text('Relatório Executivo — Investigação de Estoque AV',margin,11);
+    pdf.setFontSize(8); pdf.setFont(undefined,'normal');
+    pdf.text(AV_LOCATION+' — Gerado em '+new Date().toLocaleString('pt-BR'),margin,16);
+    pdf.setTextColor(0,0,0); y=26;
     setProgress(25);
-    const AGG = window.__AGG;
-    const totalSkus = AV_SKUS.size;
-    const totalPecas = Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0);
-    const topOp = topN(AGG.byOperator,'qty',1)[0];
-    const topProc = topN(AGG.byType,'qty',1)[0];
-    const topCat = topN(AGG.byCategory,'qty',1)[0];
-
-    pdf.setFontSize(11); pdf.setFont(undefined,'bold');
-    pdf.text('KPIs Executivos', margin, y); y+=6;
+    const AGG=window.__AGG;
+    const totalSkus=AV_SKUS.size, totalPecas=Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0);
+    const topOp=topN(AGG.byOperator,'qty',1)[0], topProc=topN(AGG.byType,'qty',1)[0], topCat=topN(AGG.byCategory,'qty',1)[0];
+    pdf.setFontSize(11); pdf.setFont(undefined,'bold'); pdf.text('KPIs Executivos',margin,y); y+=6;
     pdf.setFontSize(9); pdf.setFont(undefined,'normal');
-    const kpiLines = [
-      `Total de SKUs em AV: ${fmtNum(totalSkus)}`,
-      `Total de Peças em AV: ${fmtNum(totalPecas)}`,
-      `Operadores Envolvidos: ${Object.keys(AGG.byOperator).length}`,
-      `Top Operador Ofensor: ${topOp?topOp[0]+' ('+fmtNum(topOp[1].qty)+' pçs)':'-'}`,
-      `Top Processo Ofensor: ${topProc?topProc[0]+' ('+fmtNum(topProc[1].qty)+' pçs)':'-'}`,
-      `Categoria Mais Impactada: ${topCat?topCat[0]+' ('+fmtNum(topCat[1].qty)+' pçs)':'-'}`,
-      `Qtd. Total Movimentada p/ AV: ${fmtNum(AGG.totalQtyToAV)} (${fmtNum(AGG.totalEntriesCount)} entradas)`
-    ];
-    for(const line of kpiLines){ pdf.text('• '+line, margin+2, y); y+=5; }
+    const kpiLines=[`Total de SKUs em AV: ${fmtNum(totalSkus)}`,`Total de Peças em AV: ${fmtNum(totalPecas)}`,`Operadores Envolvidos: ${Object.keys(AGG.byOperator).length}`,`Top Operador Ofensor: ${topOp?topOp[0]+' ('+fmtNum(topOp[1].qty)+' pçs)':'-'}`,`Top Processo Ofensor: ${topProc?topProc[0]+' ('+fmtNum(topProc[1].qty)+' pçs)':'-'}`,`Categoria Mais Impactada: ${topCat?topCat[0]+' ('+fmtNum(topCat[1].qty)+' pçs)':'-'}`,`Qtd. Total Movimentada p/ AV: ${fmtNum(AGG.totalQtyToAV)} (${fmtNum(AGG.totalEntriesCount)} entradas)`];
+    for(const line of kpiLines){ pdf.text('• '+line,margin+2,y); y+=5; }
     y+=3;
-
-    // Insights
-    pdf.setFontSize(11); pdf.setFont(undefined,'bold');
-    pdf.text('Principais Descobertas', margin, y); y+=6;
+    pdf.setFontSize(11); pdf.setFont(undefined,'bold'); pdf.text('Principais Descobertas',margin,y); y+=6;
     pdf.setFontSize(9); pdf.setFont(undefined,'normal');
-    const insightTexts = [...document.getElementById('insightsBox').children].map(el=>el.innerText);
-    for(const t of insightTexts){
-      const split = pdf.splitTextToSize('• '+t, pageW-2*margin-2);
-      pdf.text(split, margin+2, y); y += split.length*5;
-    }
-    y+=3;
-
-    setProgress(45);
-
-    // Charts as images
-    const chartIds = ['chartParetoType','chartParetoOp','chartDailyIn','chartDailyOut','chartDailyBalance','chartProcessPareto','chartProcessPie'];
+    const insightTexts=[...document.getElementById('insightsBox').children].map(el=>el.innerText);
+    for(const t of insightTexts){ const split=pdf.splitTextToSize('• '+t,pageW-2*margin-2); pdf.text(split,margin+2,y); y+=split.length*5; }
+    y+=3; setProgress(45);
+    const chartIds=['chartParetoType','chartParetoOp','chartDailyInOut','chartDailyBalance','chartProcessPareto','chartProcessPie'];
     for(const id of chartIds){
-      const chart = CHARTS[id];
-      if(!chart) continue;
-      const imgData = chart.toBase64Image();
-      const imgW = (pageW-2*margin-6)/2;
-      const imgH = imgW*0.6;
-      if(y + imgH > 280){ pdf.addPage(); y=15; }
+      const chart=CHARTS[id]; if(!chart) continue;
+      const imgData=chart.toBase64Image();
+      const imgW=(pageW-2*margin-6)/2, imgH=imgW*0.6;
+      if(y+imgH>280){ pdf.addPage(); y=15; }
       pdf.addImage(imgData,'PNG',margin,y,imgW,imgH);
-      // place next chart beside if fits
       if(chartIds.indexOf(id)%2===0 && chartIds[chartIds.indexOf(id)+1]){
-        const nextChart = CHARTS[chartIds[chartIds.indexOf(id)+1]];
-        if(nextChart){
-          pdf.addImage(nextChart.toBase64Image(),'PNG',margin+imgW+6,y,imgW,imgH);
-        }
-        y += imgH+6;
-      } else if(chartIds.indexOf(id)%2!==0){
-        // already drawn beside previous
-      } else {
-        y += imgH+6;
+        const nc=CHARTS[chartIds[chartIds.indexOf(id)+1]];
+        if(nc) pdf.addImage(nc.toBase64Image(),'PNG',margin+imgW+6,y,imgW,imgH);
+        y+=imgH+6;
       }
     }
-
     setProgress(70);
-
-    // Top offenders table (text)
-    if(y > 230){ pdf.addPage(); y=15; }
-    pdf.setFontSize(11); pdf.setFont(undefined,'bold');
-    pdf.text('Top 10 SKUs Ofensores (Qtd. em AV)', margin, y); y+=6;
+    if(y>230){ pdf.addPage(); y=15; }
+    pdf.setFontSize(11); pdf.setFont(undefined,'bold'); pdf.text('Top 10 SKUs Ofensores',margin,y); y+=6;
     pdf.setFontSize(8); pdf.setFont(undefined,'normal');
-    const topSkus = [...AV_SKUS].map(id=>SKU_PROFILE[id]).sort((a,b)=>b.currentQty-a.currentQty).slice(0,10);
-    for(const s of topSkus){
-      pdf.text(`${s.skuId}  |  ${s.skuName.slice(0,40)}  |  Qtd AV: ${fmtNum(s.currentQty)}  |  Categoria: ${s.category}`, margin+2, y);
-      y+=5;
-      if(y>285){ pdf.addPage(); y=15; }
-    }
-
+    const topSkus=[...AV_SKUS].map(id=>SKU_PROFILE[id]).sort((a,b)=>b.currentQty-a.currentQty).slice(0,10);
+    for(const s of topSkus){ pdf.text(`${s.skuId}  |  ${s.skuName.slice(0,40)}  |  Qtd AV: ${fmtNum(s.currentQty)}  |  ${s.category}`,margin+2,y); y+=5; if(y>285){pdf.addPage();y=15;} }
     setProgress(95);
     pdf.save('Relatorio_Executivo_AV_'+new Date().toISOString().slice(0,10)+'.pdf');
-    setProgress(100);
-    await new Promise(r=>setTimeout(r,200));
-  }catch(err){
-    console.error(err);
-    alert('Erro ao gerar PDF: '+err.message);
-  }
+    setProgress(100); await new Promise(r=>setTimeout(r,200));
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
   hideLoader();
 }
 </script>
