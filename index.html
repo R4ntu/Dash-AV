@@ -854,6 +854,8 @@ function processTransactions(){
   for(const skuId in SKU_TRANS){
     SKU_TRANS[skuId].sort((a,b)=>{ const ta=a.date?a.date.getTime():0, tb=b.date?b.date.getTime():0; return ta-tb; });
   }
+  resolveOffenders();
+
   SKU_PROFILE = {};
   for(const skuId of AV_SKUS){
     const txs = SKU_TRANS[skuId] || [];
@@ -931,6 +933,38 @@ function clearFilters(){
   buildEverything(true);
 }
 
+// ── RESOLVE RACK_TRANSFER_CYCLECOUNT → PUTAWAY OFFENDER ──────────────────────
+// When a CC entry hits AV it means the product was NOT found during cycle count.
+// The real cause is the last PUTAWAY for that SKU — we re-attribute blame there.
+function resolveOffenders() {
+  for (const tx of ALL_AV_TRANS) {
+    tx.resolvedOperator = tx.operator;
+    tx.resolvedType     = tx.type;
+    tx.isCCRedirected   = false;
+    tx.resolvedFromTx   = null;
+
+    if (tx.isEntryAV && tx.type === 'RACK_TRANSFER_CYCLECOUNT') {
+      const skuTxs = SKU_TRANS[tx.skuId] || [];
+      // Find the most recent PUTAWAY for this SKU before (or at) this transaction date
+      let lastPutaway = null;
+      for (const t of skuTxs) {
+        if (t === tx) continue;
+        if (!t.type || !t.type.toUpperCase().includes('PUTAWAY')) continue;
+        if (tx.date && t.date && t.date > tx.date) continue;
+        if (!lastPutaway || (t.date && lastPutaway.date && t.date > lastPutaway.date)) {
+          lastPutaway = t;
+        }
+      }
+      if (lastPutaway) {
+        tx.resolvedOperator = lastPutaway.operator;
+        tx.resolvedType     = 'PUTAWAY (origem CC)';
+        tx.resolvedFromTx   = lastPutaway;
+        tx.isCCRedirected   = true;
+      }
+    }
+  }
+}
+
 // ── AGGREGATIONS ─────────────────────────────────────────────────────────────
 function aggregate(transList){
   const byType={}, byOperator={}, byCategory={}, bySku={};
@@ -938,14 +972,18 @@ function aggregate(transList){
   const dailyIn={}, dailyOut={};
 
   for(const t of transList){
-    if(!byType[t.type]) byType[t.type]={count:0,qty:0,skus:new Set()};
-    byType[t.type].count++; byType[t.type].qty+=t.qty; byType[t.type].skus.add(t.skuId);
+    // Use resolved type/operator (CC entries re-attributed to originating PUTAWAY)
+    const effType = t.resolvedType     || t.type;
+    const effOp   = t.resolvedOperator || t.operator;
 
-    if(!byOperator[t.operator]) byOperator[t.operator]={count:0,qty:0,qtyIn:0,qtyOut:0,skus:new Set(),cats:{}};
-    byOperator[t.operator].count++; byOperator[t.operator].qty+=t.qty; byOperator[t.operator].skus.add(t.skuId);
-    byOperator[t.operator].cats[t.category] = (byOperator[t.operator].cats[t.category]||0)+1;
-    if(t.isEntryAV) byOperator[t.operator].qtyIn  += t.qty;
-    if(t.isExitAV)  byOperator[t.operator].qtyOut += t.qty;
+    if(!byType[effType]) byType[effType]={count:0,qty:0,skus:new Set()};
+    byType[effType].count++; byType[effType].qty+=t.qty; byType[effType].skus.add(t.skuId);
+
+    if(!byOperator[effOp]) byOperator[effOp]={count:0,qty:0,qtyIn:0,qtyOut:0,skus:new Set(),cats:{}};
+    byOperator[effOp].count++; byOperator[effOp].qty+=t.qty; byOperator[effOp].skus.add(t.skuId);
+    byOperator[effOp].cats[t.category] = (byOperator[effOp].cats[t.category]||0)+1;
+    if(t.isEntryAV) byOperator[effOp].qtyIn  += t.qty;
+    if(t.isExitAV)  byOperator[effOp].qtyOut += t.qty;
 
     if(!byCategory[t.category]) byCategory[t.category]={count:0,qty:0,skus:new Set()};
     byCategory[t.category].count++; byCategory[t.category].qty+=t.qty; byCategory[t.category].skus.add(t.skuId);
@@ -1045,6 +1083,14 @@ function buildInsights(AGG){
   const top5proc = topN(AGG.byType,'qty',5);
   const top5procSum = top5proc.reduce((a,p)=>a+p[1].qty,0);
   if(top5proc.length) insights.push(`Os <b>5 principais processos</b> concentram <b>${fmtPct(top5procSum/totalQty*100)}</b> do volume total movimentado para AV.`);
+
+  // CC redirect insight
+  const ccRedirected = FILTERED_TRANS.filter(t=>t.isCCRedirected);
+  if(ccRedirected.length > 0){
+    const ccQty = ccRedirected.reduce((a,t)=>a+t.qty,0);
+    const ccOps = new Set(ccRedirected.map(t=>t.resolvedOperator));
+    insights.push(`<b>${fmtNum(ccRedirected.length)}</b> entradas via <b>RACK_TRANSFER_CYCLECOUNT</b> (${fmtNum(ccQty)} pçs) foram redirecionadas para o <b>PUTAWAY de origem</b> — ${ccOps.size} operador(es) identificado(s) como causadores reais.`);
+  }
 
   document.getElementById('insightsBox').innerHTML = insights.map(i=>`
     <div class="insight"><i class="fa-solid fa-circle-info"></i><div>${i}</div></div>
@@ -1399,12 +1445,15 @@ function loadSkuAnalysis(){
     let dotClass='', icon='fa-right-left';
     if(t.isEntryAV){ dotClass='in'; icon='fa-arrow-right-to-bracket'; }
     if(t.isExitAV){ dotClass='out'; icon='fa-arrow-right-from-bracket'; }
+    const ccBadge = t.isCCRedirected
+      ? `<span style="font-size:.65rem;background:#FFF7ED;color:#E05C00;border:1px solid #FED7AA;border-radius:4px;padding:.1rem .4rem;margin-left:.4rem;" title="Causa raiz redirecionada: último PUTAWAY de ${t.resolvedFromTx?t.resolvedFromTx.operator:'?'} em ${t.resolvedFromTx?fmtDate(t.resolvedFromTx.date):'?'}">↳ PUTAWAY real: ${t.resolvedOperator}</span>`
+      : '';
     return `
     <div class="tl-item">
       <div class="tl-dot ${dotClass}"><i class="fa-solid ${icon}" style="font-size:.55rem;color:#fff;"></i></div>
       <div class="tl-card">
         <div class="d-flex justify-content-between flex-wrap gap-2">
-          <div><span class="badge badge-shopee">${t.type}</span> <b>${t.operator}</b></div>
+          <div><span class="badge badge-shopee">${t.type}</span> <b>${t.operator}</b>${ccBadge}</div>
           <div class="tl-time">${fmtDate(t.date)}</div>
         </div>
         <div class="mt-1" style="font-size:.76rem;">
@@ -1430,14 +1479,16 @@ function buildTree(AGG){
   if(!AGG) return;
   const catGroups = {};
   for(const t of FILTERED_TRANS){
+    const effType = t.resolvedType     || t.type;
+    const effOp   = t.resolvedOperator || t.operator;
     if(!catGroups[t.category]) catGroups[t.category] = {count:0, qty:0, types:{}};
     catGroups[t.category].count++; catGroups[t.category].qty += t.qty;
     const typeG = catGroups[t.category].types;
-    if(!typeG[t.type]) typeG[t.type] = {count:0, qty:0, ops:{}};
-    typeG[t.type].count++; typeG[t.type].qty += t.qty;
-    const opG = typeG[t.type].ops;
-    if(!opG[t.operator]) opG[t.operator] = {count:0, qty:0, skus:{}};
-    opG[t.operator].count++; opG[t.operator].qty += t.qty;
+    if(!typeG[effType]) typeG[effType] = {count:0, qty:0, ops:{}};
+    typeG[effType].count++; typeG[effType].qty += t.qty;
+    const opG = typeG[effType].ops;
+    if(!opG[effOp]) opG[effOp] = {count:0, qty:0, skus:{}};
+    opG[effOp].count++; opG[effOp].qty += t.qty;
     const skuG = opG[t.operator].skus;
     if(!skuG[t.skuId]) skuG[t.skuId] = {count:0, qty:0, name: SKU_PROFILE[t.skuId]?SKU_PROFILE[t.skuId].skuName:t.skuName};
     skuG[t.skuId].count++; skuG[t.skuId].qty += t.qty;
@@ -1476,8 +1527,10 @@ function buildHeatmap(AGG){
   const types = topN(AGG.byType,'qty',12).map(d=>d[0]);
   const matrix = {}; let maxVal=0;
   for(const t of FILTERED_TRANS){
-    if(!operators.includes(t.operator)||!types.includes(t.type)) continue;
-    const key = t.operator+'|'+t.type;
+    const effType = t.resolvedType     || t.type;
+    const effOp   = t.resolvedOperator || t.operator;
+    if(!operators.includes(effOp)||!types.includes(effType)) continue;
+    const key = effOp+'|'+effType;
     if(!matrix[key]) matrix[key]={count:0,qty:0};
     matrix[key].count++; matrix[key].qty+=t.qty;
     const v = HEAT_MODE==='count'?matrix[key].count:matrix[key].qty;
