@@ -411,13 +411,13 @@ table.dataTable tbody td{vertical-align:middle;}
       <div class="row g-3 mb-3">
         <div class="col-lg-6">
           <div class="card-x">
-            <div class="card-title-x"><i class="fa-solid fa-chart-bar"></i>Pareto Top 10 Transaction Types</div>
+            <div class="card-title-x"><i class="fa-solid fa-chart-bar"></i>Pareto — Processo Causador (saldo on-hand AV)</div>
             <div class="chart-box tall"><canvas id="chartParetoType"></canvas></div>
           </div>
         </div>
         <div class="col-lg-6">
           <div class="card-x">
-            <div class="card-title-x"><i class="fa-solid fa-chart-bar"></i>Pareto Top 10 Operadores</div>
+            <div class="card-title-x"><i class="fa-solid fa-chart-bar"></i>Pareto — Operador Causador (saldo on-hand AV)</div>
             <div class="chart-box tall"><canvas id="chartParetoOp"></canvas></div>
           </div>
         </div>
@@ -933,6 +933,37 @@ function clearFilters(){
   buildEverything(true);
 }
 
+// ── ON_HAND AGGREGATION — Executive Summary usa saldo atual, não volume de tx ──
+// Para cada SKU em AV, pega currentQty e atribui ao último processo/operador causador
+function buildOnHandAgg() {
+  const byType = {}, byOperator = {}, byCategory = {};
+
+  for (const skuId of AV_SKUS) {
+    const onhand = ONHAND_BY_SKU[skuId];
+    if (!onhand || onhand.qty <= 0) continue;
+    const qty      = onhand.qty;
+    const category = onhand.category || 'Sem Categoria';
+
+    // Último entry de AV para este SKU (já com resolvedType/resolvedOperator)
+    const txs = (SKU_TRANS[skuId] || []).filter(t => t.isEntryAV);
+    const lastEntry = txs.length ? txs[txs.length - 1] : null;
+
+    const effType = lastEntry ? (lastEntry.resolvedType || lastEntry.type) : 'Sem Registro';
+    const effOp   = lastEntry ? (lastEntry.resolvedOperator || lastEntry.operator) : 'Sem Registro';
+
+    if (!byType[effType]) byType[effType] = { qty:0, skus:new Set(), count:0 };
+    byType[effType].qty += qty; byType[effType].skus.add(skuId); byType[effType].count++;
+
+    if (!byOperator[effOp]) byOperator[effOp] = { qty:0, skus:new Set(), count:0, cats:{} };
+    byOperator[effOp].qty += qty; byOperator[effOp].skus.add(skuId); byOperator[effOp].count++;
+    byOperator[effOp].cats[category] = (byOperator[effOp].cats[category]||0)+1;
+
+    if (!byCategory[category]) byCategory[category] = { qty:0, skus:new Set(), count:0 };
+    byCategory[category].qty += qty; byCategory[category].skus.add(skuId); byCategory[category].count++;
+  }
+  return { byType, byOperator, byCategory };
+}
+
 // ── RESOLVE RACK_TRANSFER_CYCLECOUNT → PUTAWAY OFFENDER ──────────────────────
 // When a CC entry hits AV it means the product was NOT found during cycle count.
 // The real cause is the last PUTAWAY for that SKU — we re-attribute blame there.
@@ -945,21 +976,42 @@ function resolveOffenders() {
 
     if (tx.isEntryAV && tx.type === 'RACK_TRANSFER_CYCLECOUNT') {
       const skuTxs = SKU_TRANS[tx.skuId] || [];
-      // Find the most recent PUTAWAY for this SKU before (or at) this transaction date
+
+      // 1) Busca último PUTAWAY antes desta transação
       let lastPutaway = null;
       for (const t of skuTxs) {
         if (t === tx) continue;
         if (!t.type || !t.type.toUpperCase().includes('PUTAWAY')) continue;
         if (tx.date && t.date && t.date > tx.date) continue;
-        if (!lastPutaway || (t.date && lastPutaway.date && t.date > lastPutaway.date)) {
+        if (!lastPutaway || (t.date && lastPutaway.date && t.date > lastPutaway.date))
           lastPutaway = t;
-        }
       }
+
       if (lastPutaway) {
         tx.resolvedOperator = lastPutaway.operator;
         tx.resolvedType     = 'PUTAWAY (origem CC)';
         tx.resolvedFromTx   = lastPutaway;
         tx.isCCRedirected   = true;
+      } else {
+        // 2) Sem PUTAWAY → busca qualquer tx não-CC anterior
+        let lastAny = null;
+        for (const t of skuTxs) {
+          if (t === tx) continue;
+          if (t.type === 'RACK_TRANSFER_CYCLECOUNT') continue;
+          if (tx.date && t.date && t.date > tx.date) continue;
+          if (!lastAny || (t.date && lastAny.date && t.date > lastAny.date))
+            lastAny = t;
+        }
+        if (lastAny) {
+          tx.resolvedOperator = lastAny.operator;
+          tx.resolvedType     = (lastAny.type||'Movimentação') + ' (origem CC)';
+          tx.resolvedFromTx   = lastAny;
+          tx.isCCRedirected   = true;
+        } else {
+          // 3) Sem histórico — nunca exibe como CC
+          tx.resolvedType = 'Origem não identificada';
+          tx.isCCRedirected = false;
+        }
       }
     }
   }
@@ -1013,12 +1065,14 @@ function buildEverything(isFilterUpdate){
     FILTERED_TRANS = ALL_AV_TRANS.slice();
     populateSkuDatalist();
   }
-  const AGG = aggregate(FILTERED_TRANS);
-  window.__AGG = AGG;
-  buildKPIs(AGG);
-  buildInsights(AGG);
-  buildParetoCharts(AGG);
-  buildDailyCharts(AGG);
+  const AGG       = aggregate(FILTERED_TRANS);
+  const OHAGG     = buildOnHandAgg();   // on-hand snapshot for Executive Summary
+  window.__AGG    = AGG;
+  window.__OHAGG  = OHAGG;
+  buildKPIs(OHAGG, AGG);
+  buildInsights(OHAGG, AGG);
+  buildParetoCharts(OHAGG);
+  buildDailyCharts(AGG);          // fluxo diário permanece baseado em transações
   buildOperatorTable(AGG);
   buildProcessPage(AGG);
   buildTopOffenders(AGG);
@@ -1027,22 +1081,23 @@ function buildEverything(isFilterUpdate){
 }
 
 // ── KPIs ─────────────────────────────────────────────────────────────────────
-function buildKPIs(AGG){
-  const totalSkus = AV_SKUS.size;
+function buildKPIs(OHAGG, AGG){
+  const totalSkus  = AV_SKUS.size;
   const totalPecas = Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0);
-  const avgQty = totalSkus? totalPecas/totalSkus : 0;
-  const totalOperators = Object.keys(AGG.byOperator).length;
-  const topOp = topN(AGG.byOperator,'qty',1)[0];
-  const topProc = topN(AGG.byType,'qty',1)[0];
-  const topCat = topN(AGG.byCategory,'qty',1)[0];
+  const avgQty     = totalSkus ? totalPecas/totalSkus : 0;
+  const totalOperators = Object.keys(OHAGG.byOperator).length;
+  // Top proc/op/cat baseados em saldo ON_HAND, não volume de transações
+  const topOp   = topN(OHAGG.byOperator,'qty',1)[0];
+  const topProc = topN(OHAGG.byType,'qty',1)[0];
+  const topCat  = topN(OHAGG.byCategory,'qty',1)[0];
   const cards = [
     {label:'Total de SKUs em AV', value: fmtNum(totalSkus), sub:'Localização '+AV_LOCATION},
     {label:'Total de Peças em AV', value: fmtNum(totalPecas), sub:'Saldo atual (On Hand)'},
     {label:'Qtd. Média por SKU', value: fmtNum(avgQty), sub:'Peças / SKU'},
     {label:'Operadores Envolvidos', value: fmtNum(totalOperators), sub:'No período filtrado'},
-    {label:'Top Operador Ofensor', value: topOp?topOp[0]:'-', sub: topOp?`${fmtNum(topOp[1].qty)} pçs / ${fmtNum(topOp[1].count)} ocorr.`:'-'},
-    {label:'Top Processo Ofensor', value: topProc?topProc[0]:'-', sub: topProc?`${fmtNum(topProc[1].qty)} pçs / ${fmtNum(topProc[1].count)} ocorr.`:'-'},
-    {label:'Categoria Mais Impactada', value: topCat?topCat[0]:'-', sub: topCat?`${fmtNum(topCat[1].qty)} pçs`:'-'},
+    {label:'Top Operador Ofensor', value: topOp?topOp[0]:'-', sub: topOp?`${fmtNum(topOp[1].qty)} pçs on-hand atribuídas`:'-'},
+    {label:'Top Processo Ofensor', value: topProc?topProc[0]:'-', sub: topProc?`${fmtNum(topProc[1].qty)} pçs on-hand atribuídas`:'-'},
+    {label:'Categoria Mais Impactada', value: topCat?topCat[0]:'-', sub: topCat?`${fmtNum(topCat[1].qty)} pçs on-hand`:'-'},
     {label:'Qtd. Total Movimentada p/ AV', value: fmtNum(AGG.totalQtyToAV), sub: `${fmtNum(AGG.totalEntriesCount)} entradas registradas`}
   ];
   document.getElementById('kpiGrid').innerHTML = cards.map(c=>`
@@ -1055,41 +1110,48 @@ function buildKPIs(AGG){
 }
 
 // ── INSIGHTS ─────────────────────────────────────────────────────────────────
-function buildInsights(AGG){
+function buildInsights(OHAGG, AGG){
   const insights = [];
-  const totalQty = AGG.totalQtyToAV || 1;
-  const totalCount = FILTERED_TRANS.filter(t=>t.isEntryAV).length || 1;
-  const topOp = topN(AGG.byOperator,'qty',1)[0];
-  const topProc = topN(AGG.byType,'qty',1)[0];
-  const topCat = topN(AGG.byCategory,'qty',1)[0];
-  const topSkuByCount = topN(AGG.bySku,'count',1)[0];
+  const totalOnHand = Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0) || 1;
+
+  // Insights baseados em ON_HAND (o que está em AV hoje)
+  const topProc = topN(OHAGG.byType,'qty',1)[0];
+  const topOp   = topN(OHAGG.byOperator,'qty',1)[0];
+  const topCat  = topN(OHAGG.byCategory,'qty',1)[0];
+  const top5op  = topN(OHAGG.byOperator,'qty',5);
+  const top5proc= topN(OHAGG.byType,'qty',5);
 
   if(topProc){
-    const pctQty = (topProc[1].qty/totalQty*100);
-    const pctCount = (AGG.byType[topProc[0]].count/totalCount*100);
-    insights.push(`O processo <b>${topProc[0]}</b> representa <b>${fmtPct(pctCount)}</b> das ocorrências e <b>${fmtPct(pctQty)}</b> do volume movimentado para AV.`);
+    const pct = topProc[1].qty / totalOnHand * 100;
+    insights.push(`O processo <b>${topProc[0]}</b> é responsável por <b>${fmtNum(topProc[1].qty)}</b> das peças atualmente em AV (<b>${fmtPct(pct)}</b> do saldo on-hand).`);
   }
   if(topOp){
-    const top5 = topN(AGG.byOperator,'qty',5);
-    const top5sum = top5.reduce((a,o)=>a+o[1].qty,0);
-    insights.push(`Os <b>5 principais operadores</b> concentram <b>${fmtPct(top5sum/totalQty*100)}</b> do volume total movimentado para AV.`);
-    insights.push(`O operador <b>${topOp[0]}</b> é o mais associado ao AV, responsável por <b>${fmtNum(topOp[1].qty)}</b> peças em <b>${fmtNum(topOp[1].count)}</b> ocorrências.`);
+    insights.push(`O operador <b>${topOp[0]}</b> é o maior causador do saldo AV atual, com <b>${fmtNum(topOp[1].qty)}</b> peças on-hand atribuídas.`);
   }
-  if(topCat) insights.push(`A categoria <b>${topCat[0]}</b> é a mais impactada, com <b>${fmtNum(topCat[1].qty)}</b> peças movimentadas para AV.`);
+  if(top5op.length){
+    const top5sum = top5op.reduce((a,o)=>a+o[1].qty,0);
+    insights.push(`Os <b>5 principais operadores</b> concentram <b>${fmtPct(top5sum/totalOnHand*100)}</b> do saldo AV on-hand atual.`);
+  }
+  if(topCat){
+    insights.push(`A categoria <b>${topCat[0]}</b> representa <b>${fmtNum(topCat[1].qty)}</b> peças do saldo AV atual (<b>${fmtPct(topCat[1].qty/totalOnHand*100)}</b>).`);
+  }
+  if(top5proc.length){
+    const top5sum = top5proc.reduce((a,p)=>a+p[1].qty,0);
+    insights.push(`Os <b>5 principais processos causadores</b> respondem por <b>${fmtPct(top5sum/totalOnHand*100)}</b> do estoque AV on-hand.`);
+  }
+
+  // CC redirect insight (baseado em transações)
+  const ccRedirected = ALL_AV_TRANS.filter(t=>t.isCCRedirected);
+  if(ccRedirected.length > 0){
+    const ccOps = new Set(ccRedirected.map(t=>t.resolvedOperator));
+    insights.push(`<b>${fmtNum(ccRedirected.length)}</b> entradas via <b>RACK_TRANSFER_CYCLECOUNT</b> foram redirecionadas para o processo de origem — ${ccOps.size} operador(es) identificado(s) como causadores reais.`);
+  }
+
+  // Top SKU reincidente (transações)
+  const topSkuByCount = topN(AGG.bySku,'count',1)[0];
   if(topSkuByCount){
     const sp = SKU_PROFILE[topSkuByCount[0]];
-    insights.push(`O SKU mais reincidente é <b>${topSkuByCount[0]}</b> (${sp?sp.skuName:''}), com <b>${fmtNum(topSkuByCount[1].count)}</b> movimentações.`);
-  }
-  const top5proc = topN(AGG.byType,'qty',5);
-  const top5procSum = top5proc.reduce((a,p)=>a+p[1].qty,0);
-  if(top5proc.length) insights.push(`Os <b>5 principais processos</b> concentram <b>${fmtPct(top5procSum/totalQty*100)}</b> do volume total movimentado para AV.`);
-
-  // CC redirect insight
-  const ccRedirected = FILTERED_TRANS.filter(t=>t.isCCRedirected);
-  if(ccRedirected.length > 0){
-    const ccQty = ccRedirected.reduce((a,t)=>a+t.qty,0);
-    const ccOps = new Set(ccRedirected.map(t=>t.resolvedOperator));
-    insights.push(`<b>${fmtNum(ccRedirected.length)}</b> entradas via <b>RACK_TRANSFER_CYCLECOUNT</b> (${fmtNum(ccQty)} pçs) foram redirecionadas para o <b>PUTAWAY de origem</b> — ${ccOps.size} operador(es) identificado(s) como causadores reais.`);
+    insights.push(`O SKU mais reincidente em movimentações é <b>${topSkuByCount[0]}</b> (${sp?sp.skuName:''}), com <b>${fmtNum(topSkuByCount[1].count)}</b> transações registradas.`);
   }
 
   document.getElementById('insightsBox').innerHTML = insights.map(i=>`
@@ -1100,47 +1162,60 @@ function buildInsights(AGG){
 // ── PARETO CHARTS ─────────────────────────────────────────────────────────────
 function destroyChart(id){ if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; } }
 
-function buildParetoCharts(AGG){
-  const typeData = topN(AGG.byType,'qty',10);
-  destroyChart('chartParetoType');
-  CHARTS['chartParetoType'] = new Chart(document.getElementById('chartParetoType'), {
-    type:'bar',
-    data:{
-      labels: typeData.map(d=>d[0]),
-      datasets:[
-        {label:'Quantidade', data: typeData.map(d=>d[1].qty), backgroundColor:'#EE4D2D', yAxisID:'y'},
-        {label:'Ocorrências', data: typeData.map(d=>d[1].count), backgroundColor:'#1A1D29', yAxisID:'y1', type:'line', borderColor:'#1A1D29', tension:.3}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      scales:{
-        y:{beginAtZero:true, position:'left', title:{display:true,text:'Quantidade'}},
-        y1:{beginAtZero:true, position:'right', grid:{drawOnChartArea:false}, title:{display:true,text:'Ocorrências'}}
+function buildParetoCharts(OHAGG){
+  // Usa saldo ON_HAND — mostra "quantas peças ESTÃO em AV por processo/operador"
+  const totalOH = Object.values(ONHAND_BY_SKU).reduce((a,b)=>a+b.qty,0) || 1;
+
+  function makeParetoDatasets(data) {
+    let cum = 0;
+    const cumPct = data.map(d=>{ cum += d[1].qty/totalOH*100; return +cum.toFixed(1); });
+    return [
+      {
+        label: 'Peças em AV (on-hand)',
+        data: data.map(d=>d[1].qty),
+        backgroundColor: 'rgba(238,77,45,0.85)',
+        borderColor: '#EE4D2D', borderWidth:1, borderRadius:3,
+        yAxisID: 'y', order: 2
       },
-      plugins:{legend:{position:'bottom'}}
-    }
+      {
+        label: '% Acumulado (on-hand)',
+        type: 'line',
+        data: cumPct,
+        borderColor: '#1A1D29', backgroundColor:'transparent',
+        borderWidth: 2, pointRadius: 4, tension:.2,
+        yAxisID: 'y1', order: 1
+      }
+    ];
+  }
+
+  const paretoOpts = (titleY) => ({
+    responsive:true, maintainAspectRatio:false,
+    interaction:{ mode:'index', intersect:false },
+    scales:{
+      y:{ beginAtZero:true, position:'left',
+          title:{ display:true, text: titleY + ' — Peças on-hand' } },
+      y1:{ beginAtZero:true, max:110, position:'right',
+           grid:{ drawOnChartArea:false },
+           title:{ display:true, text:'% Acumulado' },
+           ticks:{ callback: v => v+'%' } }
+    },
+    plugins:{ legend:{ position:'bottom' } }
   });
 
-  const opData = topN(AGG.byOperator,'qty',10);
+  // Pareto por Processo
+  const typeData = topN(OHAGG.byType,'qty',10);
+  destroyChart('chartParetoType');
+  CHARTS['chartParetoType'] = new Chart(document.getElementById('chartParetoType'), {
+    data:{ labels: typeData.map(d=>d[0]), datasets: makeParetoDatasets(typeData) },
+    options: paretoOpts('Processo causador')
+  });
+
+  // Pareto por Operador
+  const opData = topN(OHAGG.byOperator,'qty',10);
   destroyChart('chartParetoOp');
   CHARTS['chartParetoOp'] = new Chart(document.getElementById('chartParetoOp'), {
-    type:'bar',
-    data:{
-      labels: opData.map(d=>d[0]),
-      datasets:[
-        {label:'Quantidade', data: opData.map(d=>d[1].qty), backgroundColor:'#EE4D2D', yAxisID:'y'},
-        {label:'Ocorrências', data: opData.map(d=>d[1].count), backgroundColor:'#1A1D29', yAxisID:'y1', type:'line', borderColor:'#1A1D29', tension:.3}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      scales:{
-        y:{beginAtZero:true, position:'left', title:{display:true,text:'Quantidade'}},
-        y1:{beginAtZero:true, position:'right', grid:{drawOnChartArea:false}, title:{display:true,text:'Ocorrências'}}
-      },
-      plugins:{legend:{position:'bottom'}}
-    }
+    data:{ labels: opData.map(d=>d[0]), datasets: makeParetoDatasets(opData) },
+    options: paretoOpts('Operador causador')
   });
 }
 
