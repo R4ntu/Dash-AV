@@ -1160,7 +1160,18 @@ function buildInsights(OHAGG, AGG){
 }
 
 // ── PARETO CHARTS ─────────────────────────────────────────────────────────────
-function destroyChart(id){ if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; } }
+function destroyChart(id){
+  // Destroy via our registry
+  if(CHARTS[id]){ try{ CHARTS[id].destroy(); }catch(e){} delete CHARTS[id]; }
+  // Also destroy via Chart.js internal registry (prevents "canvas already in use")
+  try{
+    const canvas = document.getElementById(id);
+    if(canvas){
+      const existing = Chart.getChart(canvas);
+      if(existing){ existing.destroy(); }
+    }
+  }catch(e){}
+}
 
 function buildParetoCharts(OHAGG){
   // Usa saldo ON_HAND — mostra "quantas peças ESTÃO em AV por processo/operador"
